@@ -1,0 +1,40 @@
+# dynmap-mobs configuration
+#
+update:
+  # Seconds between position updates
+  period: 5.0
+  # Round position to given unit
+  resolution: 1.0
+  # Make players hidden when they are inside/underground/in shadows (#=light level: 0=full shadow,15=sky(disable hide))
+  hideifshadow: 4
+  # Make player hidden when they are under cover (#=sky light level,0=underground,15=open to sky(disable hide))
+  hideifundercover: 15
+
+mobs:
+  # Include creepers
+  creeper: true
+  # Include skeletons
+  skeleton: true
+  # Include zombies
+  zombie: true
+  # Include blazes
+  blaze: true
+  # Include ghasts
+  ghast: true
+  # Include silverfish
+  silverfish: true
+  # Include slimes
+  slime: true
+  # Include spiders
+  spider: true
+  # Include wolves
+  wolf: true
+  # Include zombie-pigmen
+  zombiepigman: true
+  
+layer:
+  name: "Mobs"
+  # Make mobs layer hidden by default
+  hidebydefault: false
+  # ordering priority in layer menu (low goes before high - default is 0)
+  layerprio: 10
