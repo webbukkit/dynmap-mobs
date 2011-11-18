@@ -207,7 +207,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         updperiod = (long)(per*20.0);
         getServer().getScheduler().scheduleSyncDelayedTask(this, new MobUpdate(), updperiod);
         
-        info("Version " + this.getDescription().getVersion() + " enabled");
+        info("version " + this.getDescription().getVersion() + " is enabled");
     }
 
     public void onDisable() {
