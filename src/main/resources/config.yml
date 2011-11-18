@@ -31,6 +31,18 @@ mobs:
   wolf: true
   # Include zombie-pigmen
   zombiepigman: true
+  # Include Enderdragon
+  enderdragon: true
+  # Include mooshroom
+  mooshroom: true
+  # Include snow golems
+  snowgolem: true
+  # Include cave spider
+  cavespider: true
+  # Include spider jockey
+  spiderjockey: true
+  # Include enderman
+  enderman: true
   
 layer:
   name: "Mobs"

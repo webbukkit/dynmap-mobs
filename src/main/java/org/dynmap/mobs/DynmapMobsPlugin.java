@@ -50,29 +50,33 @@ public class DynmapMobsPlugin extends JavaPlugin {
         String label;
         MarkerIcon icon;
         
-        MobMapping(String id, Class cls, String lbl) {
+        MobMapping(String id, String clsid, String lbl) {
             mobid = id;
-            mobclass = cls;
+            try {
+                mobclass = Class.forName(clsid);
+            } catch (ClassNotFoundException cnfx) {
+                mobclass = null;
+            }
             label = lbl;
         }
     };
     MobMapping mobs[] = {
-            //new MobMapping("blaze", Blaze.class, "Blaze"),
-            //new MobMapping("enderdragon", EnderDragon.class, "Enderdragon"),
-            new MobMapping("ghast", Ghast.class, "Ghast"),
-            //new MobMapping("mooshroom", Mooshroom.class, "Mooshroom"),
-            new MobMapping("silverfish", Silverfish.class, "Silverfish"),
-            new MobMapping("slime", Slime.class, "Slime"),
-            //new MobMapping("snowgolem", SnowGolem.class, "Snow Golem"),
-            new MobMapping("cavespider", CaveSpider.class, "Cave Spider"),
-            new MobMapping("spider", Spider.class, "Spider"),
-            //new MobMapping("spiderjockey", Spider.class, "Spider"),
-            new MobMapping("wolf", Wolf.class, "Wolf"),
-            new MobMapping("zombiepigman", PigZombie.class, "Zombie Pigman"),
-            new MobMapping("creeper", Creeper.class, "Creeper"),
-            new MobMapping("skeleton", Skeleton.class, "Skeleton"),
-            new MobMapping("enderman", Enderman.class, "Enderman"),
-            new MobMapping("zombie", Zombie.class, "Zombie")
+            new MobMapping("blaze", "org.bukkit.entity.Blaze", "Blaze"),
+            new MobMapping("enderdragon", "org.bukkit.entity.EnderDragon", "Enderdragon"),
+            new MobMapping("ghast", "org.bukkit.entity.EnderDragon", "Ghast"),
+            new MobMapping("mooshroom", "org.bukkit.entity.MushroomCow", "Mooshroom"),
+            new MobMapping("silverfish", "org.bukkit.entity.Silverfish", "Silverfish"),
+            new MobMapping("slime", "org.bukkit.entity.Slime", "Slime"),
+            new MobMapping("snowgolem", "org.bukkit.entity.Snowman", "Snow Golem"),
+            new MobMapping("cavespider", "org.bukkit.entity.CaveSpider", "Cave Spider"),
+            new MobMapping("spider", "org.bukkit.entity.Spider", "Spider"),
+            new MobMapping("spiderjockey", "org.bukkit.entity.Spider", "Spider Jockey"), /* Must be just after "spider" */
+            new MobMapping("wolf", "org.bukkit.entity.Wolf", "Wolf"),
+            new MobMapping("zombiepigman", "org.bukkit.entity.PigZombie", "Zombie Pigman"),
+            new MobMapping("creeper", "org.bukkit.entity.Creeper", "Creeper"),
+            new MobMapping("skeleton", "org.bukkit.entity.Skeleton", "Skeleton"),
+            new MobMapping("enderman", "org.bukkit.entity.Enderman", "Enderman"),
+            new MobMapping("zombie", "org.bukkit.entity.Zombie", "Zombie")
     };
     
     public static void info(String msg) {
@@ -100,11 +104,19 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 
                 /* See if entity is mob we care about */
                 for(i = 0; i < mobs.length; i++) {
-                    if(mobs[i].enabled && mobs[i].mobclass.isInstance(le)){
+                    if((mobs[i].mobclass != null) && mobs[i].mobclass.isInstance(le)){
                         break;
                     }
                 }
                 if(i >= mobs.length) continue;
+                if(mobs[i].mobid.equals("spider")) {    /* Check for jockey */
+                    if(le.getPassenger() != null) { /* Has passenger? */
+                        i++;    /* Make jockey */
+                    }
+                }
+                if(mobs[i].enabled == false)
+                    continue;
+                
                 Location loc = le.getLocation();
 
                 if(hideifshadow < 15) {
@@ -168,6 +180,8 @@ public class DynmapMobsPlugin extends JavaPlugin {
             severe("Error creating marker set");
             return;
         }
+        set.setLayerPriority(cfg.getInt("layer.layerprio", 10));
+        set.setHideByDefault(cfg.getBoolean("layer.hidebydefault", false));
         /* Get position resolution */
         res = cfg.getDouble("update.resolution", 1.0);
 
