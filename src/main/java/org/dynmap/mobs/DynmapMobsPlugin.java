@@ -6,8 +6,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Enderman;
@@ -64,6 +66,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("blaze", "org.bukkit.entity.Blaze", "Blaze"),
             new MobMapping("enderdragon", "org.bukkit.entity.EnderDragon", "Enderdragon"),
             new MobMapping("ghast", "org.bukkit.entity.EnderDragon", "Ghast"),
+            new MobMapping("cow", "org.bukkit.entity.Cow", "Cow"),
             new MobMapping("mooshroom", "org.bukkit.entity.MushroomCow", "Mooshroom"),
             new MobMapping("silverfish", "org.bukkit.entity.Silverfish", "Silverfish"),
             new MobMapping("slime", "org.bukkit.entity.Slime", "Slime"),
@@ -72,11 +75,18 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("spider", "org.bukkit.entity.Spider", "Spider"),
             new MobMapping("spiderjockey", "org.bukkit.entity.Spider", "Spider Jockey"), /* Must be just after "spider" */
             new MobMapping("wolf", "org.bukkit.entity.Wolf", "Wolf"),
+            new MobMapping("tamedwolf", "org.bukkit.entity.Wolf", "Wolf"), /* Must be just after wolf */
             new MobMapping("zombiepigman", "org.bukkit.entity.PigZombie", "Zombie Pigman"),
             new MobMapping("creeper", "org.bukkit.entity.Creeper", "Creeper"),
             new MobMapping("skeleton", "org.bukkit.entity.Skeleton", "Skeleton"),
             new MobMapping("enderman", "org.bukkit.entity.Enderman", "Enderman"),
-            new MobMapping("zombie", "org.bukkit.entity.Zombie", "Zombie")
+            new MobMapping("zombie", "org.bukkit.entity.Zombie", "Zombie"),
+            new MobMapping("giant", "org.bukkit.entity.Giant", "Giant"),
+            new MobMapping("chicken", "org.bukkit.entity.Chicken", "Chicken"),
+            new MobMapping("pig", "org.bukkit.entity.Pig", "Pig"),
+            new MobMapping("sheep", "org.bukkit.entity.Sheep", "Sheep"),
+            new MobMapping("squid", "org.bukkit.entity.Squid", "Squid"),
+            new MobMapping("villager", "org.bukkit.entity.Villager", "Villager")
     };
     
     public static void info(String msg) {
@@ -109,9 +119,21 @@ public class DynmapMobsPlugin extends JavaPlugin {
                     }
                 }
                 if(i >= mobs.length) continue;
+                String label = mobs[i].label;
                 if(mobs[i].mobid.equals("spider")) {    /* Check for jockey */
                     if(le.getPassenger() != null) { /* Has passenger? */
                         i++;    /* Make jockey */
+                        label = mobs[i].label;
+                    }
+                }
+                else if(mobs[i].mobid.equals("wolf")) { /* Check for tamed wolf */
+                    Wolf wolf = (Wolf)le;
+                    if(wolf.isTamed()) {
+                        i++;
+                        AnimalTamer t = wolf.getOwner();
+                        if((t != null) && (t instanceof OfflinePlayer)) {
+                            label = "Wolf (" + ((OfflinePlayer)t).getName() + ")";
+                        }
                     }
                 }
                 if(mobs[i].enabled == false)
@@ -137,10 +159,12 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 double z = Math.round(loc.getZ() / res) * res;
                 Marker m = mobicons.remove(le.getEntityId());
                 if(m == null) { /* Not found?  Need new one */
-                    m = set.createMarker("mob"+le.getEntityId(), mobs[i].label, w.getName(), x, y, z, mobs[i].icon, false);
+                    m = set.createMarker("mob"+le.getEntityId(), label, w.getName(), x, y, z, mobs[i].icon, false);
                 }
                 else {  /* Else, update position if needed */
                     m.setLocation(w.getName(), x, y, z);
+                    m.setLabel(label);
+                    m.setMarkerIcon(mobs[i].icon);
                 }
                 newmap.put(le.getEntityId(), m);    /* Add to new map */
             }

@@ -33,8 +33,6 @@ mobs:
   zombiepigman: true
   # Include Enderdragon
   enderdragon: true
-  # Include mooshroom
-  mooshroom: true
   # Include snow golems
   snowgolem: true
   # Include cave spider
@@ -43,6 +41,22 @@ mobs:
   spiderjockey: true
   # Include enderman
   enderman: true
+  # Include cows
+  cow: false
+  # Include pigs
+  pig: false
+  # Include chickens
+  chicken: false
+  # Include squids
+  squid: false
+  # Include sheep
+  sheep: false
+  # Include villagers
+  villager: false
+  # Include mooshroom
+  mooshroom: false
+  # Include tamed wolves
+  tamedwolf: true  
   
 layer:
   name: "Mobs"
