@@ -181,10 +181,14 @@ public class DynmapMobsPlugin extends JavaPlugin {
     }
     
     public void onEnable() {
+    	info("initializing");
         Plugin p = this.getServer().getPluginManager().getPlugin("dynmap"); /* Find dynmap */
         if(p == null) {
             severe("Error loading dynmap API!");
             return;
+        }
+        if(!p.isEnabled()) {	/* If not enabled yet, enable it */
+    		this.getServer().getPluginManager().enablePlugin(p);
         }
         api = (DynmapAPI)p; /* Get API */
         /* Now, get markers API */
