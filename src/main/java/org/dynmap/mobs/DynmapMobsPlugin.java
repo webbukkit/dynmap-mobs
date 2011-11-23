@@ -10,18 +10,12 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.CaveSpider;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Enderman;
-import org.bukkit.entity.Ghast;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.PigZombie;
-import org.bukkit.entity.Silverfish;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Slime;
-import org.bukkit.entity.Spider;
 import org.bukkit.entity.Wolf;
-import org.bukkit.entity.Zombie;
+import org.bukkit.event.Event.Priority;
+import org.bukkit.event.Event.Type;
+import org.bukkit.event.server.PluginEnableEvent;
+import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -35,6 +29,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
     private static final Logger log = Logger.getLogger("Minecraft");
     private static final String LOG_PREFIX = "[dynmap-mobs] ";
 
+    Plugin dynmap;
     DynmapAPI api;
     MarkerAPI markerapi;
     FileConfiguration cfg;
@@ -43,6 +38,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
     long updperiod;
     int hideifundercover;
     int hideifshadow;
+    boolean stop;
     
     /* Mapping of mobs to icons */
     private static class MobMapping {
@@ -98,7 +94,8 @@ public class DynmapMobsPlugin extends JavaPlugin {
 
     private class MobUpdate implements Runnable {
         public void run() {
-            updateMobs();
+            if(!stop)
+                updateMobs();
         }
     }
     
@@ -179,22 +176,36 @@ public class DynmapMobsPlugin extends JavaPlugin {
         getServer().getScheduler().scheduleSyncDelayedTask(this, new MobUpdate(), updperiod);
         
     }
+
+    private class OurServerListener extends ServerListener {
+        @Override
+        public void onPluginEnable(PluginEnableEvent event) {
+            Plugin p = event.getPlugin();
+            String name = p.getDescription().getName();
+            if(name.equals("dynmap")) {
+                activate();
+            }
+        }
+    }
     
     public void onEnable() {
-    	info("initializing");
-        Plugin p = this.getServer().getPluginManager().getPlugin("dynmap"); /* Find dynmap */
-        if(p == null) {
-            severe("Error loading Dynmap!");
+        info("initializing");
+        PluginManager pm = getServer().getPluginManager();
+        /* Get dynmap */
+        dynmap = pm.getPlugin("dynmap");
+        if(dynmap == null) {
+            severe("Cannot find dynmap!");
             return;
         }
-        if(!p.isEnabled()) {	/* Make sure it's enabled before us */
-        	getServer().getPluginManager().enablePlugin(p);
-        	if(!p.isEnabled()) {
-        		severe("Failed to enable Dynmap!");
-        		return;
-        	}
-        }
-        api = (DynmapAPI)p; /* Get API */
+        api = (DynmapAPI)dynmap; /* Get API */
+        /* If enabled, activate */
+        if(dynmap.isEnabled())
+            activate();
+        else
+            getServer().getPluginManager().registerEvent(Type.PLUGIN_ENABLE, new OurServerListener(), Priority.Monitor, this);        
+    }
+
+    private void activate() {
         /* Now, get markers API */
         markerapi = api.getMarkerAPI();
         if(markerapi == null) {
@@ -237,9 +248,10 @@ public class DynmapMobsPlugin extends JavaPlugin {
         double per = cfg.getDouble("update.period", 5.0);
         if(per < 2.0) per = 2.0;
         updperiod = (long)(per*20.0);
+        stop = false;
         getServer().getScheduler().scheduleSyncDelayedTask(this, new MobUpdate(), updperiod);
         
-        info("version " + this.getDescription().getVersion() + " is enabled");
+        info("version " + this.getDescription().getVersion() + " is activated");
     }
 
     public void onDisable() {
@@ -248,7 +260,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             set = null;
         }
         mobicons.clear();
-        
+        stop = true;
     }
 
 }
