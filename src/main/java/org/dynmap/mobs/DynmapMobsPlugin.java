@@ -39,6 +39,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
     int hideifundercover;
     int hideifshadow;
     boolean stop;
+    BlockLightLevel bll = new BlockLightLevel();
     
     /* Mapping of mobs to icons */
     private static class MobMapping {
@@ -144,9 +145,15 @@ public class DynmapMobsPlugin extends JavaPlugin {
                     }
                 }
                 if(hideifundercover < 15) {
-                    /*TODO: when pull accepted for getSkyLightLevel(), switch to that */
-                    if(loc.getWorld().getHighestBlockYAt(loc) > loc.getBlockY()) {
-                        continue;
+                    if(bll.isReady()) {
+                        if(bll.getSkyLightLevel(loc.getBlock()) <= hideifundercover) {
+                            continue;
+                        }
+                    }
+                    else {
+                        if(loc.getWorld().getHighestBlockYAt(loc) > loc.getBlockY()) {
+                            continue;
+                        }
                     }
                 }
                 
