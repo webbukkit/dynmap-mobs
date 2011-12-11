@@ -38,6 +38,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
     long updperiod;
     int hideifundercover;
     int hideifshadow;
+    boolean tinyicons;
     boolean stop;
     BlockLightLevel bll = new BlockLightLevel();
     
@@ -232,6 +233,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         }
         set.setLayerPriority(cfg.getInt("layer.layerprio", 10));
         set.setHideByDefault(cfg.getBoolean("layer.hidebydefault", false));
+        tinyicons = cfg.getBoolean("layer.tinyicons", false);
         /* Get position resolution */
         res = cfg.getDouble("update.resolution", 1.0);
 
@@ -239,10 +241,16 @@ public class DynmapMobsPlugin extends JavaPlugin {
         for(int i = 0; i < mobs.length; i++) {
             mobs[i].enabled = cfg.getBoolean("mobs." + mobs[i].mobid, false);
             mobs[i].icon = markerapi.getMarkerIcon("mobs." + mobs[i].mobid);
-            if(mobs[i].icon == null) {
-                InputStream in = getClass().getResourceAsStream("/" + mobs[i].mobid + ".png");
-                if(in != null)
+            InputStream in = null;
+            if(tinyicons)
+            	in = getClass().getResourceAsStream("/8x8/" + mobs[i].mobid + ".png");
+            if(in == null)
+            	in = getClass().getResourceAsStream("/" + mobs[i].mobid + ".png");
+            if(in != null) {
+                if(mobs[i].icon == null)
                     mobs[i].icon = markerapi.createMarkerIcon("mobs." + mobs[i].mobid, mobs[i].label, in);
+                else	/* Update image */
+                	mobs[i].icon.setMarkerIconImage(in);
             }
             if(mobs[i].icon == null) {
                 mobs[i].icon = markerapi.getMarkerIcon(MarkerIcon.DEFAULT);
@@ -250,6 +258,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         }
         hideifshadow = cfg.getInt("update.hideifshadow", 15);
         hideifundercover = cfg.getInt("update.hideifundercover", 15);
+        
         
         /* Set up update job - based on periond */
         double per = cfg.getDouble("update.period", 5.0);
