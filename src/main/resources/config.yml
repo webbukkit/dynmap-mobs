@@ -66,4 +66,6 @@ layer:
   layerprio: 10
   # (optional) if true, use tiny marker icons (8x8) - default is 16x16
   tinyicons: false
+  # (optional) if true, don't show labels on mob icons
+  nolabels: false
   

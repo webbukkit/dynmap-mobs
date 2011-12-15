@@ -39,6 +39,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
     int hideifundercover;
     int hideifshadow;
     boolean tinyicons;
+    boolean nolabels;
     boolean stop;
     BlockLightLevel bll = new BlockLightLevel();
     
@@ -163,6 +164,8 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 double y = Math.round(loc.getY() / res) * res;
                 double z = Math.round(loc.getZ() / res) * res;
                 Marker m = mobicons.remove(le.getEntityId());
+                if(nolabels)
+                    label = "";
                 if(m == null) { /* Not found?  Need new one */
                     m = set.createMarker("mob"+le.getEntityId(), label, w.getName(), x, y, z, mobs[i].icon, false);
                 }
@@ -234,6 +237,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         set.setLayerPriority(cfg.getInt("layer.layerprio", 10));
         set.setHideByDefault(cfg.getBoolean("layer.hidebydefault", false));
         tinyicons = cfg.getBoolean("layer.tinyicons", false);
+        nolabels = cfg.getBoolean("layer.nolabels", false);
         /* Get position resolution */
         res = cfg.getDouble("update.resolution", 1.0);
 
