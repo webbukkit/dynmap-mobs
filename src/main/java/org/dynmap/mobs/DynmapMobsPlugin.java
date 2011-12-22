@@ -229,13 +229,20 @@ public class DynmapMobsPlugin extends JavaPlugin {
         this.saveConfig();  /* Save updates, if needed */
         
         /* Now, add marker set for mobs (make it transient) */
-        set = markerapi.createMarkerSet("mobs.markerset", cfg.getString("layer.name", "Mobs"), null, false);
+        set = markerapi.getMarkerSet("mobs.markerset");
+        if(set == null)
+            set = markerapi.createMarkerSet("mobs.markerset", cfg.getString("layer.name", "Mobs"), null, false);
+        else
+            set.setMarkerSetLabel(cfg.getString("layer.name", "Mobs"));
         if(set == null) {
             severe("Error creating marker set");
             return;
         }
         set.setLayerPriority(cfg.getInt("layer.layerprio", 10));
         set.setHideByDefault(cfg.getBoolean("layer.hidebydefault", false));
+        int minzoom = cfg.getInt("layer.minzoom", 0);
+        if(minzoom > 0) /* Don't call if non-default - lets us work with pre-0.28 dynmap */
+            set.setMinZoom(minzoom);
         tinyicons = cfg.getBoolean("layer.tinyicons", false);
         nolabels = cfg.getBoolean("layer.nolabels", false);
         /* Get position resolution */

@@ -68,4 +68,6 @@ layer:
   tinyicons: false
   # (optional) if true, don't show labels on mob icons
   nolabels: false
+  # (optional) set minimum zoom level when mob icons should be visible (0=default, any zoom)
+  minzoom: 0
   
