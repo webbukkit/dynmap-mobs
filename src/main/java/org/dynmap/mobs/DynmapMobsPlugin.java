@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.LivingEntity;
@@ -41,7 +42,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
     boolean tinyicons;
     boolean nolabels;
     boolean stop;
-    BlockLightLevel bll = new BlockLightLevel();
     
     /* Mapping of mobs to icons */
     private static class MobMapping {
@@ -140,22 +140,17 @@ public class DynmapMobsPlugin extends JavaPlugin {
                     continue;
                 
                 Location loc = le.getLocation();
-
+                Block blk = null;
                 if(hideifshadow < 15) {
-                    if(loc.getBlock().getLightLevel() <= hideifshadow) {
+                    blk = loc.getBlock();
+                    if(blk.getLightLevel() <= hideifshadow) {
                         continue;
                     }
                 }
                 if(hideifundercover < 15) {
-                    if(bll.isReady()) {
-                        if(bll.getSkyLightLevel(loc.getBlock()) <= hideifundercover) {
-                            continue;
-                        }
-                    }
-                    else {
-                        if(loc.getWorld().getHighestBlockYAt(loc) > loc.getBlockY()) {
-                            continue;
-                        }
+                    if(blk == null) blk = loc.getBlock();
+                    if(blk.getLightFromSky() <= hideifundercover) {
+                        continue;
                     }
                 }
                 
