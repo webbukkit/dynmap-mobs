@@ -2,5 +2,5 @@ name: dynmap-mobs
 main: org.dynmap.mobs.DynmapMobsPlugin
 version: "${project.version}"
 author: mikeprimm
-softdepend: [ dynmap ]
+depend: [ dynmap ]
 

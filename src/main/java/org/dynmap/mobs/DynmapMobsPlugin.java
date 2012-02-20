@@ -13,10 +13,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Wolf;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -47,7 +47,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
     private static class MobMapping {
         String mobid;
         boolean enabled;
-        Class mobclass;
+        Class<?> mobclass;
         String label;
         MarkerIcon icon;
         
@@ -183,8 +183,9 @@ public class DynmapMobsPlugin extends JavaPlugin {
         
     }
 
-    private class OurServerListener extends ServerListener {
-        @Override
+    private class OurServerListener implements Listener {
+        @SuppressWarnings("unused")
+        @EventHandler(priority=EventPriority.MONITOR)
         public void onPluginEnable(PluginEnableEvent event) {
             Plugin p = event.getPlugin();
             String name = p.getDescription().getName();
@@ -204,11 +205,12 @@ public class DynmapMobsPlugin extends JavaPlugin {
             return;
         }
         api = (DynmapAPI)dynmap; /* Get API */
+
+        getServer().getPluginManager().registerEvents(new OurServerListener(), this);        
+
         /* If enabled, activate */
         if(dynmap.isEnabled())
             activate();
-        else
-            getServer().getPluginManager().registerEvent(Type.PLUGIN_ENABLE, new OurServerListener(), Priority.Monitor, this);        
     }
 
     private void activate() {
