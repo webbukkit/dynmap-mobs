@@ -12,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -75,6 +76,8 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("spiderjockey", "org.bukkit.entity.Spider", "Spider Jockey"), /* Must be just after "spider" */
             new MobMapping("wolf", "org.bukkit.entity.Wolf", "Wolf"),
             new MobMapping("tamedwolf", "org.bukkit.entity.Wolf", "Wolf"), /* Must be just after wolf */
+            new MobMapping("ocelot", "org.bukkit.entity.Ocelot", "Ocelot"),
+            new MobMapping("cat", "org.bukkit.entity.Ocelot", "Cat"), /* Must be just after ocelot */
             new MobMapping("zombiepigman", "org.bukkit.entity.PigZombie", "Zombie Pigman"),
             new MobMapping("creeper", "org.bukkit.entity.Creeper", "Creeper"),
             new MobMapping("skeleton", "org.bukkit.entity.Skeleton", "Skeleton"),
@@ -133,6 +136,16 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         AnimalTamer t = wolf.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Wolf (" + ((OfflinePlayer)t).getName() + ")";
+                        }
+                    }
+                }
+                else if(mobs[i].mobid.equals("ocelot")) { /* Check for tamed ocelot */
+                    Ocelot cat = (Ocelot)le;
+                    if(cat.isTamed()) {
+                        i++;
+                        AnimalTamer t = cat.getOwner();
+                        if((t != null) && (t instanceof OfflinePlayer)) {
+                            label = "Cat (" + ((OfflinePlayer)t).getName() + ")";
                         }
                     }
                 }

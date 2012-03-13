@@ -57,6 +57,10 @@ mobs:
   mooshroom: false
   # Include tamed wolves
   tamedwolf: true  
+  # Include ocelots
+  ocelot: true
+  # Include tamed cats
+  cat: true
   
 layer:
   name: "Mobs"
