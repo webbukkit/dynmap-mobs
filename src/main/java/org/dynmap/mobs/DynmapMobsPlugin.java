@@ -88,7 +88,9 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("pig", "org.bukkit.entity.Pig", "Pig"),
             new MobMapping("sheep", "org.bukkit.entity.Sheep", "Sheep"),
             new MobMapping("squid", "org.bukkit.entity.Squid", "Squid"),
-            new MobMapping("villager", "org.bukkit.entity.Villager", "Villager")
+            new MobMapping("villager", "org.bukkit.entity.Villager", "Villager"),
+            new MobMapping("golem", "org.bukkit.entity.IronGolem", "Iron Golem")
+            
     };
     
     public static void info(String msg) {

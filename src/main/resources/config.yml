@@ -61,6 +61,8 @@ mobs:
   ocelot: true
   # Include tamed cats
   cat: true
+  # Include Iron golems
+  golem: false
   
 layer:
   name: "Mobs"
