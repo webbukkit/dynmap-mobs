@@ -1,7 +1,9 @@
 package org.dynmap.mobs;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,8 +13,10 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Villager;
+import org.bukkit.entity.Villager.Profession;
 import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -43,19 +47,22 @@ public class DynmapMobsPlugin extends JavaPlugin {
     boolean tinyicons;
     boolean nolabels;
     boolean stop;
+    boolean reload = false;
+    Class<Entity>[] mobclasses;
     
     /* Mapping of mobs to icons */
     private static class MobMapping {
         String mobid;
         boolean enabled;
-        Class<?> mobclass;
+        Class<Entity> mobclass;
         String label;
         MarkerIcon icon;
         
+        @SuppressWarnings("unchecked")
         MobMapping(String id, String clsid, String lbl) {
             mobid = id;
             try {
-                mobclass = Class.forName(clsid);
+                mobclass = (Class<Entity>) Class.forName(clsid);
             } catch (ClassNotFoundException cnfx) {
                 mobclass = null;
             }
@@ -114,7 +121,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         Map<Integer,Marker> newmap = new HashMap<Integer,Marker>(); /* Build new map */
         
         for(World w : getServer().getWorlds()) {
-            for(LivingEntity le : w.getLivingEntities()) {
+            for(Entity le : w.getEntitiesByClasses(mobclasses)) {
                 int i;
                 
                 /* See if entity is mob we care about */
@@ -148,6 +155,29 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         AnimalTamer t = cat.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Cat (" + ((OfflinePlayer)t).getName() + ")";
+                        }
+                    }
+                }
+                else if(mobs[i].mobid.equals("villager")) {
+                    Villager v = (Villager)le;
+                    Profession p = v.getProfession();
+                    if(p != null) {
+                        switch(p) {
+                            case BLACKSMITH:
+                                label = "Blacksmith";
+                                break;
+                            case BUTCHER:
+                                label = "Butcher";
+                                break;
+                            case FARMER:
+                                label = "Farmer";
+                                break;
+                            case LIBRARIAN:
+                                label = "Librarian";
+                                break;
+                            case PRIEST:
+                                label = "Priest";
+                                break;
                         }
                     }
                 }
@@ -199,7 +229,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
     }
 
     private class OurServerListener implements Listener {
-        @SuppressWarnings("unused")
         @EventHandler(priority=EventPriority.MONITOR)
         public void onPluginEnable(PluginEnableEvent event) {
             Plugin p = event.getPlugin();
@@ -228,6 +257,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             activate();
     }
 
+    @SuppressWarnings("unchecked")
     private void activate() {
         /* Now, get markers API */
         markerapi = api.getMarkerAPI();
@@ -236,6 +266,12 @@ public class DynmapMobsPlugin extends JavaPlugin {
             return;
         }
         /* Load configuration */
+        if(reload) {
+            reloadConfig();
+        }
+        else {
+            reload = true;
+        }
         FileConfiguration cfg = getConfig();
         cfg.options().copyDefaults(true);   /* Load defaults, if needed */
         this.saveConfig();  /* Save updates, if needed */
@@ -261,6 +297,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         res = cfg.getDouble("update.resolution", 1.0);
 
         /* Now, check which mobs are enabled */
+        Set<Class<Entity>> clsset = new HashSet<Class<Entity>>();
         for(int i = 0; i < mobs.length; i++) {
             mobs[i].enabled = cfg.getBoolean("mobs." + mobs[i].mobid, false);
             mobs[i].icon = markerapi.getMarkerIcon("mobs." + mobs[i].mobid);
@@ -278,7 +315,13 @@ public class DynmapMobsPlugin extends JavaPlugin {
             if(mobs[i].icon == null) {
                 mobs[i].icon = markerapi.getMarkerIcon(MarkerIcon.DEFAULT);
             }
+            if(mobs[i].enabled) {
+                clsset.add(mobs[i].mobclass);
+            }
         }
+        mobclasses = new Class[clsset.size()];
+        clsset.toArray(mobclasses);
+        
         hideifshadow = cfg.getInt("update.hideifshadow", 15);
         hideifundercover = cfg.getInt("update.hideifundercover", 15);
         

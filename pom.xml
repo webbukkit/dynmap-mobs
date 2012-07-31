@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dynmap-mobs</groupId>
   <artifactId>dynmap-mobs</artifactId>
-  <version>0.19</version>
+  <version>0.20</version>
   <build>
   	  <resources>
 		<resource>
@@ -54,14 +54,12 @@
   	<dependency>
   		<groupId>org.bukkit</groupId>
   		<artifactId>bukkit</artifactId>
-  		<version>[1.2.3-R0.1,1.7)</version>
-  		<scope>compile</scope>
+  		<version>[1.2.5-R4,1.7)</version>
   	</dependency>
   	<dependency>
   		<groupId>org.dynmap</groupId>
   		<artifactId>dynmap-api</artifactId>
-  		<version>[0.32,)</version>
-  		<scope>compile</scope>
+  		<version>[0.60,)</version>
   	</dependency>
   </dependencies>
   <properties>
