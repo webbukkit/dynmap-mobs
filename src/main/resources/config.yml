@@ -63,6 +63,39 @@ mobs:
   cat: true
   # Include Iron golems
   golem: false
+  # Mo'Creatures Mobs
+  horse: false
+  fireogre: false
+  caveogre: false
+  ogre: false
+  boar: false
+  polarbear: false
+  bear: false
+  duck: false
+  bigcat: false
+  deer: false
+  wildwolf: false
+  flamewraith: false
+  wraith: false
+  bunny: false
+  bird: false
+  fox: false
+  werewolf: false
+  shark: false
+  dolphin: false
+  fishy: false
+  kitty: false
+  hellrat: false
+  rat: false
+  mouse: false
+  scorpion: false
+  turtle: false
+  crocodile: false
+  ray: false
+  jellyfish: false
+  goat: false
+  snake: false
+  ostrich: false
   
 layer:
   name: "Mobs"

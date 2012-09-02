@@ -54,12 +54,17 @@
   	<dependency>
   		<groupId>org.bukkit</groupId>
   		<artifactId>bukkit</artifactId>
-  		<version>[1.2.5-R4,1.7)</version>
+  		<version>[1.2.5-R5,1.7)</version>
   	</dependency>
   	<dependency>
   		<groupId>org.dynmap</groupId>
   		<artifactId>dynmap-api</artifactId>
   		<version>[0.60,)</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.bukkit</groupId>
+  		<artifactId>craftbukkit</artifactId>
+  		<version>[1.2.5-R5.0,1.7)</version>
   	</dependency>
   </dependencies>
   <properties>

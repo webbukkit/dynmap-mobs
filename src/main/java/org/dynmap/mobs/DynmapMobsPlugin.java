@@ -1,4 +1,5 @@
 package org.dynmap.mobs;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ocelot;
@@ -55,21 +57,70 @@ public class DynmapMobsPlugin extends JavaPlugin {
         String mobid;
         boolean enabled;
         Class<Entity> mobclass;
+        Class<net.minecraft.server.Entity> entclass;
+        String entclsid;
         String label;
         MarkerIcon icon;
         
         @SuppressWarnings("unchecked")
         MobMapping(String id, String clsid, String lbl) {
+            this(id, clsid, lbl, null);
+        }
+        @SuppressWarnings("unchecked")
+        MobMapping(String id, String clsid, String lbl, String entclsid) {
             mobid = id;
             try {
                 mobclass = (Class<Entity>) Class.forName(clsid);
             } catch (ClassNotFoundException cnfx) {
                 mobclass = null;
             }
+            try {
+                this.entclsid = entclsid;
+                if(entclsid != null)
+                    entclass = (Class<net.minecraft.server.Entity>) Class.forName(entclsid);
+            } catch (ClassNotFoundException cnfx) {
+                entclass = null;
+            }
             label = lbl;
         }
     };
-    MobMapping mobs[] = {
+    MobMapping mobs[];
+
+    private MobMapping configmobs[] = {
+            // Mo'Creatures
+            new MobMapping("horse", "org.bukkit.entity.Animals", "Horse", "net.minecraft.server.MoCEntityHorse"),
+            new MobMapping("fireogre", "org.bukkit.entity.Monster", "Fire Ogre", "net.minecraft.server.MoCEntityFireOgre"),
+            new MobMapping("caveogre", "org.bukkit.entity.Monster", "Cave Ogre", "net.minecraft.server.MoCEntityCaveOgre"),
+            new MobMapping("ogre", "org.bukkit.entity.Monster", "Ogre", "net.minecraft.server.MoCEntityOgre"),
+            new MobMapping("boar", "org.bukkit.entity.Pig", "Boar", "net.minecraft.server.MoCEntityBoar"),
+            new MobMapping("polarbear", "org.bukkit.entity.Animals", "Polar Bear", "net.minecraft.server.MoCEntityPolarBear"),
+            new MobMapping("bear", "org.bukkit.entity.Animals", "Bear", "net.minecraft.server.MoCEntityBear"),
+            new MobMapping("duck", "org.bukkit.entity.Chicken", "Duck", "net.minecraft.server.MoCEntityDuck"),
+            new MobMapping("bigcat", "org.bukkit.entity.Animals", "Big Cat", "net.minecraft.server.MoCEntityBigCat"),
+            new MobMapping("deer", "org.bukkit.entity.Animals", "Deer", "net.minecraft.server.MoCEntityDeer"),
+            new MobMapping("wildwolf", "org.bukkit.entity.Monster", "Wild Wolf", "net.minecraft.server.MoCEntityWWolf"),
+            new MobMapping("flamewraith", "org.bukkit.entity.Monster", "Wraith", "net.minecraft.server.MoCEntityFlameWraith"),
+            new MobMapping("wraith", "org.bukkit.entity.Monster", "Wraith", "net.minecraft.server.MoCEntityWraith"),
+            new MobMapping("bunny", "org.bukkit.entity.Animals", "Bunny", "net.minecraft.server.MoCEntityBunny"),
+            new MobMapping("bird", "org.bukkit.entity.Animals", "Bird", "net.minecraft.server.MoCEntityBird"),
+            new MobMapping("fox", "org.bukkit.entity.Animals", "Bird", "net.minecraft.server.MoCEntityFox"),
+            new MobMapping("werewolf", "org.bukkit.entity.Monster", "Werewolf", "net.minecraft.server.MoCEntityWerewolf"),
+            new MobMapping("shark", "org.bukkit.entity.WaterMob", "Shark", "net.minecraft.server.MoCEntityShark"),
+            new MobMapping("dolphin", "org.bukkit.entity.WaterMob", "Shark", "net.minecraft.server.MoCEntityDolphin"),
+            new MobMapping("fishy", "org.bukkit.entity.WaterMob", "Fishy", "net.minecraft.server.MoCEntityFishy"),
+            new MobMapping("kitty", "org.bukkit.entity.Animals", "Kitty", "net.minecraft.server.MoCEntityKitty"),
+            new MobMapping("hellrat", "org.bukkit.entity.Monster", "Hell Rat", "net.minecraft.server.MoCEntityHellRat"),
+            new MobMapping("rat", "org.bukkit.entity.Monster", "Rat", "net.minecraft.server.MoCEntityRat"),
+            new MobMapping("mouse", "org.bukkit.entity.Animals", "Mouse", "net.minecraft.server.MoCEntityMouse"),
+            new MobMapping("scorpion", "org.bukkit.entity.Monster", "Scorpion", "net.minecraft.server.MoCEntityScorpion"),
+            new MobMapping("turtle", "org.bukkit.entity.Animals", "Turtle", "net.minecraft.server.MoCEntityTurtle"),
+            new MobMapping("crocodile", "org.bukkit.entity.Animals", "Crocodile", "net.minecraft.server.MoCEntityCrocodile"),
+            new MobMapping("ray", "org.bukkit.entity.WaterMob", "Ray", "net.minecraft.server.MoCEntityRay"),
+            new MobMapping("jellyfish", "org.bukkit.entity.WaterMob", "Jelly Fish", "net.minecraft.server.MoCEntityJellyFish"),
+            new MobMapping("goat", "org.bukkit.entity.Animals", "Goat", "net.minecraft.server.MoCEntityGoat"),
+            new MobMapping("snake", "org.bukkit.entity.Animals", "Snake", "net.minecraft.server.MoCEntitySnake"),
+            new MobMapping("ostrich", "org.bukkit.entity.Animals", "Ostrich", "net.minecraft.server.MoCEntityOstrich"),
+            // Standard
             new MobMapping("blaze", "org.bukkit.entity.Blaze", "Blaze"),
             new MobMapping("enderdragon", "org.bukkit.entity.EnderDragon", "Enderdragon"),
             new MobMapping("ghast", "org.bukkit.entity.EnderDragon", "Ghast"),
@@ -97,7 +148,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("squid", "org.bukkit.entity.Squid", "Squid"),
             new MobMapping("villager", "org.bukkit.entity.Villager", "Villager"),
             new MobMapping("golem", "org.bukkit.entity.IronGolem", "Iron Golem")
-            
     };
     
     public static void info(String msg) {
@@ -121,16 +171,24 @@ public class DynmapMobsPlugin extends JavaPlugin {
         Map<Integer,Marker> newmap = new HashMap<Integer,Marker>(); /* Build new map */
         
         for(World w : getServer().getWorlds()) {
-            for(Entity le : w.getEntitiesByClasses(mobclasses)) {
+            for(Entity le : w.getLivingEntities()) { //w.getEntitiesByClasses(mobclasses)) {
                 int i;
                 
                 /* See if entity is mob we care about */
                 for(i = 0; i < mobs.length; i++) {
                     if((mobs[i].mobclass != null) && mobs[i].mobclass.isInstance(le)){
-                        break;
+                        CraftEntity ce = (CraftEntity)le;
+                        if (mobs[i].entclsid == null) {
+                            break;
+                        }
+                        else if ((mobs[i].entclass != null) && (mobs[i].entclass.isInstance(ce.getHandle()))) {
+                            break;
+                        }
                     }
                 }
-                if(i >= mobs.length) continue;
+                if(i >= mobs.length) {
+                    continue;
+                }
                 String label = mobs[i].label;
                 if(mobs[i].mobid.equals("spider")) {    /* Check for jockey */
                     if(le.getPassenger() != null) { /* Has passenger? */
@@ -180,10 +238,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                                 break;
                         }
                     }
-                }
-                if(mobs[i].enabled == false)
-                    continue;
-                
+                }                
                 Location loc = le.getLocation();
                 Block blk = null;
                 if(hideifshadow < 15) {
@@ -255,6 +310,12 @@ public class DynmapMobsPlugin extends JavaPlugin {
         /* If enabled, activate */
         if(dynmap.isEnabled())
             activate();
+        
+        try {
+            MetricsLite ml = new MetricsLite(this);
+            ml.start();
+        } catch (IOException iox) {
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -268,6 +329,10 @@ public class DynmapMobsPlugin extends JavaPlugin {
         /* Load configuration */
         if(reload) {
             reloadConfig();
+            if(set != null)  {
+                set.deleteMarkerSet();
+                set = null;
+            }
         }
         else {
             reload = true;
@@ -298,25 +363,35 @@ public class DynmapMobsPlugin extends JavaPlugin {
 
         /* Now, check which mobs are enabled */
         Set<Class<Entity>> clsset = new HashSet<Class<Entity>>();
-        for(int i = 0; i < mobs.length; i++) {
-            mobs[i].enabled = cfg.getBoolean("mobs." + mobs[i].mobid, false);
-            mobs[i].icon = markerapi.getMarkerIcon("mobs." + mobs[i].mobid);
+        int cnt = 0;
+        for(int i = 0; i < configmobs.length; i++) {
+            configmobs[i].enabled = cfg.getBoolean("mobs." + configmobs[i].mobid, false);
+            configmobs[i].icon = markerapi.getMarkerIcon("mobs." + configmobs[i].mobid);
             InputStream in = null;
             if(tinyicons)
-            	in = getClass().getResourceAsStream("/8x8/" + mobs[i].mobid + ".png");
+                in = getClass().getResourceAsStream("/8x8/" + configmobs[i].mobid + ".png");
             if(in == null)
-            	in = getClass().getResourceAsStream("/" + mobs[i].mobid + ".png");
+                in = getClass().getResourceAsStream("/" + configmobs[i].mobid + ".png");
             if(in != null) {
-                if(mobs[i].icon == null)
-                    mobs[i].icon = markerapi.createMarkerIcon("mobs." + mobs[i].mobid, mobs[i].label, in);
-                else	/* Update image */
-                	mobs[i].icon.setMarkerIconImage(in);
+                if(configmobs[i].icon == null)
+                    configmobs[i].icon = markerapi.createMarkerIcon("mobs." + configmobs[i].mobid, configmobs[i].label, in);
+                else    /* Update image */
+                    configmobs[i].icon.setMarkerIconImage(in);
             }
-            if(mobs[i].icon == null) {
-                mobs[i].icon = markerapi.getMarkerIcon(MarkerIcon.DEFAULT);
+            if(configmobs[i].icon == null) {
+                configmobs[i].icon = markerapi.getMarkerIcon(MarkerIcon.DEFAULT);
             }
-            if(mobs[i].enabled) {
-                clsset.add(mobs[i].mobclass);
+            if(configmobs[i].enabled) {
+                cnt++;
+            }
+        }
+        /* Make list of just enabled mobs */
+        mobs = new MobMapping[cnt];
+        for(int i = 0, j = 0; i < configmobs.length; i++) {
+            if(configmobs[i].enabled) {
+                mobs[j] = configmobs[i];
+                j++;
+                clsset.add(configmobs[i].mobclass);
             }
         }
         mobclasses = new Class[clsset.size()];
@@ -324,7 +399,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
         
         hideifshadow = cfg.getInt("update.hideifshadow", 15);
         hideifundercover = cfg.getInt("update.hideifundercover", 15);
-        
         
         /* Set up update job - based on periond */
         double per = cfg.getDouble("update.period", 5.0);
