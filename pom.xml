@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dynmap-mobs</groupId>
   <artifactId>dynmap-mobs</artifactId>
-  <version>0.30</version>
+  <version>0.40</version>
   <build>
   	  <resources>
 		<resource>
