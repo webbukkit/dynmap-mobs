@@ -63,6 +63,16 @@ mobs:
   cat: true
   # Include Iron golems
   golem: false
+  # Include witches
+  witch: false
+  # Include wither skeletons
+  witherskeleton: true
+  # Include wither
+  wither: true
+  # Include zombie villager
+  zombievillager: true
+  # Include bats
+  bat: false
   # Mo'Creatures Mobs
   horse: false
   fireogre: false

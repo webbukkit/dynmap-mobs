@@ -11,15 +11,19 @@ import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Villager.Profession;
 import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -121,11 +125,14 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("snake", "org.bukkit.entity.Animals", "Snake", "net.minecraft.server.MoCEntitySnake"),
             new MobMapping("ostrich", "org.bukkit.entity.Animals", "Ostrich", "net.minecraft.server.MoCEntityOstrich"),
             // Standard
+            new MobMapping("bat", "org.bukkit.entity.Bat", "Bat"),
+            new MobMapping("witch", "org.bukkit.entity.Witch", "Witch"),
+            new MobMapping("wither", "org.bukkit.entity.Wither", "Wither"),
             new MobMapping("blaze", "org.bukkit.entity.Blaze", "Blaze"),
-            new MobMapping("enderdragon", "org.bukkit.entity.EnderDragon", "Enderdragon"),
+            new MobMapping("enderdragon", "org.bukkit.entity.EnderDragon", "Ender Dragon"),
             new MobMapping("ghast", "org.bukkit.entity.EnderDragon", "Ghast"),
-            new MobMapping("cow", "org.bukkit.entity.Cow", "Cow"),
             new MobMapping("mooshroom", "org.bukkit.entity.MushroomCow", "Mooshroom"),
+            new MobMapping("cow", "org.bukkit.entity.Cow", "Cow"),
             new MobMapping("silverfish", "org.bukkit.entity.Silverfish", "Silverfish"),
             new MobMapping("slime", "org.bukkit.entity.Slime", "Slime"),
             new MobMapping("snowgolem", "org.bukkit.entity.Snowman", "Snow Golem"),
@@ -139,8 +146,10 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("zombiepigman", "org.bukkit.entity.PigZombie", "Zombie Pigman"),
             new MobMapping("creeper", "org.bukkit.entity.Creeper", "Creeper"),
             new MobMapping("skeleton", "org.bukkit.entity.Skeleton", "Skeleton"),
+            new MobMapping("witherskeleton", "org.bukkit.entity.Skeleton", "Wither Skeleton"), /* Must be just after "skeleton" */
             new MobMapping("enderman", "org.bukkit.entity.Enderman", "Enderman"),
             new MobMapping("zombie", "org.bukkit.entity.Zombie", "Zombie"),
+            new MobMapping("zombievilager", "org.bukkit.entity.Zombie", "Zombie Villager"), /* Must be just after "zomnie" */
             new MobMapping("giant", "org.bukkit.entity.Giant", "Giant"),
             new MobMapping("chicken", "org.bukkit.entity.Chicken", "Chicken"),
             new MobMapping("pig", "org.bukkit.entity.Pig", "Pig"),
@@ -189,11 +198,10 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 if(i >= mobs.length) {
                     continue;
                 }
-                String label = mobs[i].label;
+                String label = null;
                 if(mobs[i].mobid.equals("spider")) {    /* Check for jockey */
                     if(le.getPassenger() != null) { /* Has passenger? */
                         i++;    /* Make jockey */
-                        label = mobs[i].label;
                     }
                 }
                 else if(mobs[i].mobid.equals("wolf")) { /* Check for tamed wolf */
@@ -214,6 +222,18 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Cat (" + ((OfflinePlayer)t).getName() + ")";
                         }
+                    }
+                }
+                else if(mobs[i].mobid.equals("zombie")) {
+                    Zombie zom = (Zombie)le;
+                    if(zom.isVillager()) {
+                        i++;    /* Make in to zombie villager */
+                    }
+                }
+                else if(mobs[i].mobid.equals("skeleton")) {
+                    Skeleton sk = (Skeleton)le;
+                    if(sk.getSkeletonType() == SkeletonType.WITHER) {
+                        i++;    /* Make in to wither skeleton */
                     }
                 }
                 else if(mobs[i].mobid.equals("villager")) {
@@ -239,6 +259,12 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         }
                     }
                 }                
+                if(i >= mobs.length) {
+                    continue;
+                }
+                if(label == null) {
+                    label = mobs[i].label;
+                }
                 Location loc = le.getLocation();
                 Block blk = null;
                 if(hideifshadow < 15) {
