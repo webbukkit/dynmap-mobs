@@ -1,6 +1,7 @@
 package org.dynmap.mobs;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -11,10 +12,8 @@ import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ocelot;
@@ -55,13 +54,22 @@ public class DynmapMobsPlugin extends JavaPlugin {
     boolean stop;
     boolean reload = false;
     Class<Entity>[] mobclasses;
+    static String obcpackage;
+    Method gethandle;
     
+    public static String mapClassName(String n) {
+        if(n.startsWith("org.bukkit.craftbukkit")) {
+            return obcpackage + n.substring("org.bukkit.craftbukkit".length());
+        }
+        return n;
+    }
+
     /* Mapping of mobs to icons */
     private static class MobMapping {
         String mobid;
         boolean enabled;
         Class<Entity> mobclass;
-        Class<net.minecraft.server.Entity> entclass;
+        Class<?> entclass;
         String entclsid;
         String label;
         MarkerIcon icon;
@@ -74,14 +82,15 @@ public class DynmapMobsPlugin extends JavaPlugin {
         MobMapping(String id, String clsid, String lbl, String entclsid) {
             mobid = id;
             try {
-                mobclass = (Class<Entity>) Class.forName(clsid);
+                mobclass = (Class<Entity>) Class.forName(mapClassName(clsid));
             } catch (ClassNotFoundException cnfx) {
                 mobclass = null;
             }
             try {
                 this.entclsid = entclsid;
-                if(entclsid != null)
-                    entclass = (Class<net.minecraft.server.Entity>) Class.forName(entclsid);
+                if(entclsid != null) {
+                    entclass = (Class<?>) Class.forName(mapClassName(entclsid));
+                }
             } catch (ClassNotFoundException cnfx) {
                 entclass = null;
             }
@@ -166,6 +175,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         log.log(Level.SEVERE, LOG_PREFIX + msg);
     }
 
+    
     private class MobUpdate implements Runnable {
         public void run() {
             if(!stop)
@@ -186,12 +196,18 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 /* See if entity is mob we care about */
                 for(i = 0; i < mobs.length; i++) {
                     if((mobs[i].mobclass != null) && mobs[i].mobclass.isInstance(le)){
-                        CraftEntity ce = (CraftEntity)le;
                         if (mobs[i].entclsid == null) {
                             break;
                         }
-                        else if ((mobs[i].entclass != null) && (mobs[i].entclass.isInstance(ce.getHandle()))) {
-                            break;
+                        else if(gethandle != null) {
+                            Object obcentity = null;
+                            try {
+                                obcentity = gethandle.invoke(le);
+                            } catch (Exception x) {
+                            }
+                            if ((mobs[i].entclass != null) && (obcentity != null) && (mobs[i].entclass.isInstance(obcentity))) {
+                                break;
+                            }
                         }
                     }
                 }
@@ -346,6 +362,20 @@ public class DynmapMobsPlugin extends JavaPlugin {
 
     @SuppressWarnings("unchecked")
     private void activate() {
+        /* Detect Bukkit package mapping crap */
+        obcpackage = getServer().getClass().getPackage().getName();
+        /* look up the getHandle method for CraftEntity */
+        try {
+            Class<?> cls = Class.forName(mapClassName("org.bukkit.craftbukkit.entity.CraftEntity"));
+            gethandle = cls.getMethod("getHandle");
+        } catch (ClassNotFoundException cnfx) {
+        } catch (NoSuchMethodException e) {
+        } catch (SecurityException e) {
+        }
+        if(gethandle == null) {
+            severe("Unable to locate CraftEntity.getHandle() - cannot process most Mo'Creatures mobs");
+        }
+        
         /* Now, get markers API */
         markerapi = api.getMarkerAPI();
         if(markerapi == null) {
