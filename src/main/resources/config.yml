@@ -1,13 +1,15 @@
 # dynmap-mobs configuration
 #
 update:
-  # Seconds between position updates
+  # Seconds between position updates for mobs
   period: 5.0
+  # Seconds between position updates for vehicles
+  vehicleperiod: 10.0
   # Round position to given unit
   resolution: 1.0
-  # Make players hidden when they are inside/underground/in shadows (#=light level: 0=full shadow,15=sky(disable hide))
+  # Make markers hidden when they are inside/underground/in shadows (#=light level: 0=full shadow,15=sky(disable hide))
   hideifshadow: 4
-  # Make player hidden when they are under cover (#=sky light level,0=underground,15=open to sky(disable hide))
+  # Make markers hidden when they are under cover (#=sky light level,0=underground,15=open to sky(disable hide))
   hideifundercover: 15
 
 mobs:
@@ -106,6 +108,10 @@ mobs:
   goat: false
   snake: false
   ostrich: false
+
+vehicles:
+  minecart: false
+  boat: false
   
 layer:
   name: "Mobs"
@@ -113,6 +119,18 @@ layer:
   hidebydefault: false
   # ordering priority in layer menu (low goes before high - default is 0)
   layerprio: 10
+  # (optional) if true, use tiny marker icons (8x8) - default is 16x16
+  tinyicons: false
+  # (optional) if true, don't show labels on mob icons
+  nolabels: false
+  # (optional) set minimum zoom level when mob icons should be visible (0=default, any zoom)
+  minzoom: 0
+  
+vehiclelayer:
+  name: "Vehicles"
+  hidebydefault: false
+  # ordering priority in layer menu (low goes before high - default is 0)
+  layerprio: 11
   # (optional) if true, use tiny marker icons (8x8) - default is 16x16
   tinyicons: false
   # (optional) if true, don't show labels on mob icons
