@@ -55,10 +55,15 @@ public class DynmapMobsPlugin extends JavaPlugin {
     boolean nolabels;
     boolean vtinyicons;
     boolean vnolabels;
+    boolean inc_coord;
+    boolean vinc_coord;
     boolean stop;
     boolean reload = false;
     static String obcpackage;
     Method gethandle;
+    
+    HashMap<String, Integer> lookup_cache = new HashMap<String, Integer>();
+    HashMap<String, Integer> vlookup_cache = new HashMap<String, Integer>();
     
     public static String mapClassName(String n) {
         if(n.startsWith("org.bukkit.craftbukkit")) {
@@ -219,22 +224,38 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 int i;
                 
                 /* See if entity is mob we care about */
-                for(i = 0; i < mobs.length; i++) {
-                    if((mobs[i].mobclass != null) && mobs[i].mobclass.isInstance(le)){
-                        if (mobs[i].entclsid == null) {
-                            break;
-                        }
-                        else if(gethandle != null) {
-                            Object obcentity = null;
-                            try {
-                                obcentity = gethandle.invoke(le);
-                            } catch (Exception x) {
-                            }
-                            if ((mobs[i].entclass != null) && (obcentity != null) && (mobs[i].entclass.isInstance(obcentity))) {
+                String clsid = null;
+                if(gethandle != null) {
+                    try {
+                        clsid = gethandle.invoke(le).getClass().getName();
+                    } catch (Exception x) {
+                    }
+                }
+                if(clsid == null)
+                    clsid = le.getClass().getName();
+                Integer idx = lookup_cache.get(clsid);
+                if(idx == null) {
+                    for(i = 0; i < mobs.length; i++) {
+                        if((mobs[i].mobclass != null) && mobs[i].mobclass.isInstance(le)){
+                            if (mobs[i].entclsid == null) {
                                 break;
+                            }
+                            else if(gethandle != null) {
+                                Object obcentity = null;
+                                try {
+                                    obcentity = gethandle.invoke(le);
+                                } catch (Exception x) {
+                                }
+                                if ((mobs[i].entclass != null) && (obcentity != null) && (mobs[i].entclass.isInstance(obcentity))) {
+                                    break;
+                                }
                             }
                         }
                     }
+                    lookup_cache.put(clsid, i);
+                }
+                else {
+                    i = idx;
                 }
                 if(i >= mobs.length) {
                     continue;
@@ -326,8 +347,12 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 double y = Math.round(loc.getY() / res) * res;
                 double z = Math.round(loc.getZ() / res) * res;
                 Marker m = mobicons.remove(le.getEntityId());
-                if(nolabels)
+                if(nolabels) {
                     label = "";
+                }
+                else if(inc_coord) {
+                    label = label + " [" + (int)x + "," + (int)y + "," + (int)z + "]";
+                }
                 if(m == null) { /* Not found?  Need new one */
                     m = set.createMarker("mob"+le.getEntityId(), label, w.getName(), x, y, z, mobs[i].icon, false);
                 }
@@ -359,22 +384,38 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 int i;
                 
                 /* See if entity is vehicle we care about */
-                for(i = 0; i < vehicles.length; i++) {
-                    if((vehicles[i].mobclass != null) && vehicles[i].mobclass.isInstance(le)){
-                        if (vehicles[i].entclsid == null) {
-                            break;
-                        }
-                        else if(gethandle != null) {
-                            Object obcentity = null;
-                            try {
-                                obcentity = gethandle.invoke(le);
-                            } catch (Exception x) {
-                            }
-                            if ((vehicles[i].entclass != null) && (obcentity != null) && (vehicles[i].entclass.isInstance(obcentity))) {
+                String clsid = null;
+                if(gethandle != null) {
+                    try {
+                        clsid = gethandle.invoke(le).getClass().getName();
+                    } catch (Exception x) {
+                    }
+                }
+                if(clsid == null)
+                    clsid = le.getClass().getName();
+                Integer idx = vlookup_cache.get(clsid);
+                if(idx == null) {
+                    for(i = 0; i < vehicles.length; i++) {
+                        if((vehicles[i].mobclass != null) && vehicles[i].mobclass.isInstance(le)){
+                            if (vehicles[i].entclsid == null) {
                                 break;
+                            }
+                            else if(gethandle != null) {
+                                Object obcentity = null;
+                                try {
+                                    obcentity = gethandle.invoke(le);
+                                } catch (Exception x) {
+                                }
+                                if ((vehicles[i].entclass != null) && (obcentity != null) && (vehicles[i].entclass.isInstance(obcentity))) {
+                                    break;
+                                }
                             }
                         }
                     }
+                    vlookup_cache.put(clsid,  i);
+                }
+                else {
+                    i = idx;
                 }
                 if(i >= vehicles.length) {
                     continue;
@@ -409,8 +450,11 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 double y = Math.round(loc.getY() / res) * res;
                 double z = Math.round(loc.getZ() / res) * res;
                 Marker m = vehicleicons.remove(le.getEntityId());
-                if(nolabels)
+                if(vnolabels)
                     label = "";
+                else if(vinc_coord) {
+                    label = label + " [" + (int)x + "," + (int)y + "," + (int)z + "]";
+                }
                 if(m == null) { /* Not found?  Need new one */
                     m = vset.createMarker("vehicle"+le.getEntityId(), label, w.getName(), x, y, z, vehicles[i].icon, false);
                 }
@@ -500,6 +544,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             }
             mobicons.clear();
             vehicleicons.clear();
+            lookup_cache.clear();
         }
         else {
             reload = true;
@@ -562,6 +607,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 set.setMinZoom(minzoom);
             tinyicons = cfg.getBoolean("layer.tinyicons", false);
             nolabels = cfg.getBoolean("layer.nolabels", false);
+            inc_coord = cfg.getBoolean("layer.inc-coord", false);
             /* Get position resolution */
             res = cfg.getDouble("update.resolution", 1.0);
             /* Set up update job - based on period */
@@ -627,6 +673,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 vset.setMinZoom(minzoom);
             vtinyicons = cfg.getBoolean("vehiclelayer.tinyicons", false);
             vnolabels = cfg.getBoolean("vehiclelayer.nolabels", false);
+            vinc_coord = cfg.getBoolean("vehiclelayer.inc-coord", false);
             /* Get position resolution */
             res = cfg.getDouble("update.resolution", 1.0);
             /* Set up update job - based on period */
@@ -655,6 +702,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         }
         mobicons.clear();
         vehicleicons.clear();
+        lookup_cache.clear();
         stop = true;
     }
 

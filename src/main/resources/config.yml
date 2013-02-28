@@ -125,6 +125,8 @@ layer:
   nolabels: false
   # (optional) set minimum zoom level when mob icons should be visible (0=default, any zoom)
   minzoom: 0
+  # (optional) include coordinate in label for icon
+  inc-coord: false
   
 vehiclelayer:
   name: "Vehicles"
@@ -137,4 +139,6 @@ vehiclelayer:
   nolabels: false
   # (optional) set minimum zoom level when mob icons should be visible (0=default, any zoom)
   minzoom: 0
+  # (optional) include coordinate in label for icon
+  inc-coord: false
   
