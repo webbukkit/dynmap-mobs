@@ -37,9 +37,7 @@ import org.dynmap.markers.MarkerSet;
 import org.dynmap.markers.Marker;
 
 public class DynmapMobsPlugin extends JavaPlugin {
-    private static final Logger log = Logger.getLogger("Minecraft");
-    private static final String LOG_PREFIX = "[dynmap-mobs] ";
-
+    private static Logger log;
     Plugin dynmap;
     DynmapAPI api;
     MarkerAPI markerapi;
@@ -64,6 +62,11 @@ public class DynmapMobsPlugin extends JavaPlugin {
     
     HashMap<String, Integer> lookup_cache = new HashMap<String, Integer>();
     HashMap<String, Integer> vlookup_cache = new HashMap<String, Integer>();
+    
+    @Override
+    public void onLoad() {
+        log = this.getLogger();
+    }
     
     public static String mapClassName(String n) {
         if(n.startsWith("org.bukkit.craftbukkit")) {
@@ -184,10 +187,10 @@ public class DynmapMobsPlugin extends JavaPlugin {
     MobMapping vehicles[];
     
     public static void info(String msg) {
-        log.log(Level.INFO, LOG_PREFIX + msg);
+        log.log(Level.INFO, msg);
     }
     public static void severe(String msg) {
-        log.log(Level.SEVERE, LOG_PREFIX + msg);
+        log.log(Level.SEVERE, msg);
     }
 
     
