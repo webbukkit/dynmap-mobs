@@ -110,7 +110,14 @@ mobs:
   ostrich: false
 
 vehicles:
+  # Specific minecart types
+  explosive-minecart: false
+  hopper-minecart: false
+  powered-minecart: false
+  spawner-minecart: false
+  storage-minecart: false
   minecart: false
+  # Boats
   boat: false
   
 layer:

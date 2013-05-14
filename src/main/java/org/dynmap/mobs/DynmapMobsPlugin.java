@@ -179,8 +179,18 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("golem", "org.bukkit.entity.IronGolem", "Iron Golem")
     };
     private MobMapping configvehicles[] = {
-            // Minecart
-            new MobMapping("minecart", "org.bukkit.entity.Minecart", "Minecart"),
+            // Explosive Minecart
+            new MobMapping("explosive-minecart", "org.bukkit.entity.minecart.ExplosiveMinecart", "Explosive Minecart"),
+            // Hopper Minecart
+            new MobMapping("hopper-minecart", "org.bukkit.entity.minecart.HopperMinecart", "Hopper Minecart"),
+            // Powered Minecart
+            new MobMapping("powered-minecart", "org.bukkit.entity.minecart.PoweredMinecart", "Powered Minecart"),
+            // Rideable Minecart
+            new MobMapping("minecart", "org.bukkit.entity.minecart.RideableMinecart", "Minecart"),
+            // Spawner Minecart
+            new MobMapping("spawner-minecart", "org.bukkit.entity.minecart.SpawnerMinecart", "Spawner Minecart"),
+            // Storage Minecart
+            new MobMapping("storage-minecart", "org.bukkit.entity.minecart.StorageMinecart", "Storage Minecart"),
             // Boat
             new MobMapping("boat", "org.bukkit.entity.Boat", "Boat")
     };
