@@ -9,14 +9,17 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.entity.Villager;
@@ -58,6 +61,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
     boolean stop;
     boolean reload = false;
     static String obcpackage;
+    static String nmspackage;
     Method gethandle;
     
     HashMap<String, Integer> lookup_cache = new HashMap<String, Integer>();
@@ -70,7 +74,10 @@ public class DynmapMobsPlugin extends JavaPlugin {
     
     public static String mapClassName(String n) {
         if(n.startsWith("org.bukkit.craftbukkit")) {
-            return obcpackage + n.substring("org.bukkit.craftbukkit".length());
+            n = getOBCPackage() + n.substring("org.bukkit.craftbukkit".length());
+        }
+        else if(n.startsWith("net.minecraft.server")) {
+            n = getNMSPackage() + n.substring("net.minecraft.server".length());
         }
         return n;
     }
@@ -85,7 +92,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
         String label;
         MarkerIcon icon;
         
-        @SuppressWarnings("unchecked")
         MobMapping(String id, String clsid, String lbl) {
             this(id, clsid, lbl, null);
         }
@@ -176,7 +182,9 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("sheep", "org.bukkit.entity.Sheep", "Sheep"),
             new MobMapping("squid", "org.bukkit.entity.Squid", "Squid"),
             new MobMapping("villager", "org.bukkit.entity.Villager", "Villager"),
-            new MobMapping("golem", "org.bukkit.entity.IronGolem", "Iron Golem")
+            new MobMapping("golem", "org.bukkit.entity.IronGolem", "Iron Golem"),
+            new MobMapping("vanillahorse", "org.bukkit.entity.Animals", "Horse", "net.minecraft.server.EntityHorse")
+            //TODO: once CB is fixed - new MobMapping("vanillahorse", "org.bukkit.entity.Horse", "Horse")
     };
     private MobMapping configvehicles[] = {
             // Explosive Minecart
@@ -244,6 +252,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                     } catch (Exception x) {
                     }
                 }
+                
                 if(clsid == null)
                     clsid = le.getClass().getName();
                 Integer idx = lookup_cache.get(clsid);
@@ -273,6 +282,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 if(i >= mobs.length) {
                     continue;
                 }
+
                 String label = null;
                 if(mobs[i].mobid.equals("spider")) {    /* Check for jockey */
                     if(le.getPassenger() != null) { /* Has passenger? */
@@ -334,6 +344,14 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         }
                     }
                 }                
+                if(mobs[i].mobid.equals("vanillahorse")) {    /* Check for rider */
+                    if(le.getPassenger() != null) { /* Has passenger? */
+                        Entity e = le.getPassenger();
+                        if (e instanceof Player) {
+                            label = mobs[i].label + " (" + ((Player)e).getName() + ")";
+                        }
+                    }
+                }
                 if(i >= mobs.length) {
                     continue;
                 }
@@ -522,10 +540,28 @@ public class DynmapMobsPlugin extends JavaPlugin {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    private static String getNMSPackage() {
+        if (nmspackage == null) {
+            Server srv = Bukkit.getServer();
+            /* Get getHandle() method */
+            try {
+                Method m = srv.getClass().getMethod("getHandle");
+                Object scm = m.invoke(srv); /* And use it to get SCM (nms object) */
+                nmspackage = scm.getClass().getPackage().getName();
+            } catch (Exception x) {
+                nmspackage = "net.minecraft.server";
+            }
+        }
+        return nmspackage;
+    }
+    private static String getOBCPackage() {
+        if (obcpackage == null) {
+            obcpackage = Bukkit.getServer().getClass().getPackage().getName();
+        }
+        return obcpackage;
+    }
+
     private void activate() {
-        /* Detect Bukkit package mapping crap */
-        obcpackage = getServer().getClass().getPackage().getName();
         /* look up the getHandle method for CraftEntity */
         try {
             Class<?> cls = Class.forName(mapClassName("org.bukkit.craftbukkit.entity.CraftEntity"));

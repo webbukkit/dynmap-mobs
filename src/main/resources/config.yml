@@ -75,6 +75,8 @@ mobs:
   zombievillager: true
   # Include bats
   bat: false
+  # Include horses (vanilla MC)
+  vanillahorse: false
   # Mo'Creatures Mobs
   horse: false
   fireogre: false
