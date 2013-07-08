@@ -233,6 +233,15 @@ public class DynmapMobsPlugin extends JavaPlugin {
     private Map<Integer, Marker> mobicons = new HashMap<Integer, Marker>();
     private Map<Integer, Marker> vehicleicons = new HashMap<Integer, Marker>();
     
+    private int findNext(int idx, String mobid) {
+        idx++;
+        if ((idx < mobs.length) && mobs[idx].mobid.equals(mobid)) {
+            return idx;
+        }
+        else {
+            return mobs.length;
+        }
+    }
     /* Update mob population and position */
     private void updateMobs() {
         if((mobs == null) || (mobs.length == 0) || (set == null)) {
@@ -286,13 +295,13 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 String label = null;
                 if(mobs[i].mobid.equals("spider")) {    /* Check for jockey */
                     if(le.getPassenger() != null) { /* Has passenger? */
-                        i++;    /* Make jockey */
+                        i = findNext(i, "spiderjockey");    /* Make jockey */
                     }
                 }
                 else if(mobs[i].mobid.equals("wolf")) { /* Check for tamed wolf */
                     Wolf wolf = (Wolf)le;
                     if(wolf.isTamed()) {
-                        i++;
+                        i = findNext(i, "tamedwolf");
                         AnimalTamer t = wolf.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Wolf (" + ((OfflinePlayer)t).getName() + ")";
@@ -302,7 +311,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 else if(mobs[i].mobid.equals("ocelot")) { /* Check for tamed ocelot */
                     Ocelot cat = (Ocelot)le;
                     if(cat.isTamed()) {
-                        i++;
+                        i = findNext(i, "cat");
                         AnimalTamer t = cat.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Cat (" + ((OfflinePlayer)t).getName() + ")";
@@ -312,13 +321,13 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 else if(mobs[i].mobid.equals("zombie")) {
                     Zombie zom = (Zombie)le;
                     if(zom.isVillager()) {
-                        i++;    /* Make in to zombie villager */
+                        i = findNext(i, "zombievilager");   /* Make in to zombie villager */
                     }
                 }
                 else if(mobs[i].mobid.equals("skeleton")) {
                     Skeleton sk = (Skeleton)le;
                     if(sk.getSkeletonType() == SkeletonType.WITHER) {
-                        i++;    /* Make in to wither skeleton */
+                        i = findNext(i, "witherskeleton");    /* Make in to wither skeleton */
                     }
                 }
                 else if(mobs[i].mobid.equals("villager")) {
@@ -344,7 +353,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         }
                     }
                 }                
-                if(mobs[i].mobid.equals("vanillahorse")) {    /* Check for rider */
+                else if(mobs[i].mobid.equals("vanillahorse")) {    /* Check for rider */
                     if(le.getPassenger() != null) { /* Has passenger? */
                         Entity e = le.getPassenger();
                         if (e instanceof Player) {
