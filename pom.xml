@@ -2,7 +2,6 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dynmap-mobs</groupId>
   <artifactId>dynmap-mobs</artifactId>
-  <version>0.90</version>
   <build>
   	  <resources>
 		<resource>
@@ -70,4 +69,5 @@
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+  <version>1.0</version>
 </project>
