@@ -11,6 +11,10 @@ update:
   hideifshadow: 4
   # Make markers hidden when they are under cover (#=sky light level,0=underground,15=open to sky(disable hide))
   hideifundercover: 15
+  # Mob updates per tick (prevent lag spikes when large number of mobs)
+  mobs-per-tick: 20
+  # Vehicle updates per tick (prevent lag spikes when large number of vehicles)
+  vehicles-per-tick: 20
 
 mobs:
   # Include creepers

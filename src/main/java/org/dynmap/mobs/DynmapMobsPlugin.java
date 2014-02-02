@@ -2,8 +2,10 @@ package org.dynmap.mobs;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -18,9 +20,12 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Horse.Variant;
 import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Villager.Profession;
@@ -63,6 +68,9 @@ public class DynmapMobsPlugin extends JavaPlugin {
     static String obcpackage;
     static String nmspackage;
     Method gethandle;
+    
+    int updates_per_tick = 20;
+    int vupdates_per_tick = 20;
     
     HashMap<String, Integer> lookup_cache = new HashMap<String, Integer>();
     HashMap<String, Integer> vlookup_cache = new HashMap<String, Integer>();
@@ -183,8 +191,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("squid", "org.bukkit.entity.Squid", "Squid"),
             new MobMapping("villager", "org.bukkit.entity.Villager", "Villager"),
             new MobMapping("golem", "org.bukkit.entity.IronGolem", "Iron Golem"),
-            new MobMapping("vanillahorse", "org.bukkit.entity.Animals", "Horse", "net.minecraft.server.EntityHorse")
-            //TODO: once CB is fixed - new MobMapping("vanillahorse", "org.bukkit.entity.Horse", "Horse")
+            new MobMapping("vanillahorse", "org.bukkit.entity.Horse", "Horse")
     };
     private MobMapping configvehicles[] = {
             // Explosive Minecart
@@ -210,47 +217,53 @@ public class DynmapMobsPlugin extends JavaPlugin {
     public static void severe(String msg) {
         log.log(Level.SEVERE, msg);
     }
-
     
     private class MobUpdate implements Runnable {
-        public void run() {
-            if(!stop) {
-                updateMobs();
-                getServer().getScheduler().scheduleSyncDelayedTask(DynmapMobsPlugin.this, new MobUpdate(), updperiod);
-            }
-        }
-    }
-
-    private class VehicleUpdate implements Runnable {
-        public void run() {
-            if(!stop) {
-                updateVehicles();
-                getServer().getScheduler().scheduleSyncDelayedTask(DynmapMobsPlugin.this, new VehicleUpdate(), vupdperiod);
-            }
-        }
-    }
-
-    private Map<Integer, Marker> mobicons = new HashMap<Integer, Marker>();
-    private Map<Integer, Marker> vehicleicons = new HashMap<Integer, Marker>();
-    
-    private int findNext(int idx, String mobid) {
-        idx++;
-        if ((idx < mobs.length) && mobs[idx].mobid.equals(mobid)) {
-            return idx;
-        }
-        else {
-            return mobs.length;
-        }
-    }
-    /* Update mob population and position */
-    private void updateMobs() {
-        if((mobs == null) || (mobs.length == 0) || (set == null)) {
-            return;
-        }
         Map<Integer,Marker> newmap = new HashMap<Integer,Marker>(); /* Build new map */
+        ArrayList<World> worldsToDo = null;
+        List<LivingEntity> mobsToDo = null;
+        int mobIndex = 0;
+        World curWorld = null;
         
-        for(World w : getServer().getWorlds()) {
-            for(Entity le : w.getLivingEntities()) {
+        public void run() {
+            if(stop || (mobs == null) || (mobs.length == 0) || (set == null)) {
+                return;
+            }
+            // If needed, prime world list
+            if (worldsToDo == null) {
+                worldsToDo = new ArrayList<World>(getServer().getWorlds());
+            }
+            while (mobsToDo == null) {
+                if (worldsToDo.isEmpty()) {
+                    /* Now, review old map - anything left is gone */
+                    for(Marker oldm : mobicons.values()) {
+                        oldm.deleteMarker();
+                    }
+                    /* And replace with new map */
+                    mobicons = newmap;        
+                    // Schedule next run
+                    getServer().getScheduler().scheduleSyncDelayedTask(DynmapMobsPlugin.this, new MobUpdate(), updperiod);
+                    return;
+                }
+                else {
+                    curWorld = worldsToDo.remove(0); // Get next world
+                    mobsToDo = curWorld.getLivingEntities();     // Get living entities
+                    mobIndex = 0;
+                    if ((mobsToDo != null) && mobsToDo.isEmpty()) {
+                        mobsToDo = null;
+                    }
+                }
+            }
+            // Process up to limit per tick
+            for (int cnt = 0; cnt < updates_per_tick; cnt++) {
+                if (mobIndex >= mobsToDo.size()) {
+                    mobsToDo = null;
+                    break;
+                }
+                // Get next entity
+                LivingEntity le = mobsToDo.get(mobIndex);
+                mobIndex++;
+                
                 int i;
                 
                 /* See if entity is mob we care about */
@@ -354,10 +367,28 @@ public class DynmapMobsPlugin extends JavaPlugin {
                     }
                 }                
                 else if(mobs[i].mobid.equals("vanillahorse")) {    /* Check for rider */
+                    Horse h = (Horse)le;
+                    Variant hv = h.getVariant();
+                    switch(hv) {
+                        case DONKEY:
+                            label = "Donkey";
+                            break;
+                        case MULE:
+                            label = "Mule";
+                            break;
+                        case UNDEAD_HORSE:
+                            label = "Undead Horse";
+                            break;
+                        case SKELETON_HORSE:
+                            label = "Skeleton Horse";
+                            break;
+                        default:
+                            break;
+                    }
                     if(le.getPassenger() != null) { /* Has passenger? */
                         Entity e = le.getPassenger();
                         if (e instanceof Player) {
-                            label = mobs[i].label + " (" + ((Player)e).getName() + ")";
+                            label = label + " (" + ((Player)e).getName() + ")";
                         }
                     }
                 }
@@ -381,7 +412,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         continue;
                     }
                 }
-                
                 /* See if we already have marker */
                 double x = Math.round(loc.getX() / res) * res;
                 double y = Math.round(loc.getY() / res) * res;
@@ -394,35 +424,66 @@ public class DynmapMobsPlugin extends JavaPlugin {
                     label = label + " [" + (int)x + "," + (int)y + "," + (int)z + "]";
                 }
                 if(m == null) { /* Not found?  Need new one */
-                    m = set.createMarker("mob"+le.getEntityId(), label, w.getName(), x, y, z, mobs[i].icon, false);
+                    m = set.createMarker("mob"+le.getEntityId(), label, curWorld.getName(), x, y, z, mobs[i].icon, false);
                 }
                 else {  /* Else, update position if needed */
-                    m.setLocation(w.getName(), x, y, z);
+                    m.setLocation(curWorld.getName(), x, y, z);
                     m.setLabel(label);
                     m.setMarkerIcon(mobs[i].icon);
                 }
                 newmap.put(le.getEntityId(), m);    /* Add to new map */
             }
+            getServer().getScheduler().scheduleSyncDelayedTask(DynmapMobsPlugin.this, this, 1);
         }
-        /* Now, review old map - anything left is gone */
-        for(Marker oldm : mobicons.values()) {
-            oldm.deleteMarker();
-        }
-        /* And replace with new map */
-        mobicons = newmap;        
     }
 
-    /* Update vehicle population and position */
-    private void updateVehicles() {
-        if((vehicles == null) || (vehicles.length == 0) || (vset == null)) {
-            return;
-        }
+    private class VehicleUpdate implements Runnable {
         Map<Integer,Marker> newmap = new HashMap<Integer,Marker>(); /* Build new map */
-        
-        for(World w : getServer().getWorlds()) {
-            for(Entity le : w.getEntitiesByClasses(org.bukkit.entity.Vehicle.class)) {
-                int i;
+        ArrayList<World> worldsToDo = null;
+        List<Entity> vehiclesToDo = null;
+        int vehiclesIndex = 0;
+        World curWorld = null;
+
+        public void run() {
+            if(stop || (vehicles == null) || (vehicles.length == 0) || (vset == null)) {
+                return;
+            }
+            // If needed, prime world list
+            if (worldsToDo == null) {
+                worldsToDo = new ArrayList<World>(getServer().getWorlds());
+            }
+            while (vehiclesToDo == null) {
+                if (worldsToDo.isEmpty()) {
+                    /* Now, review old map - anything left is gone */
+                    for(Marker oldm : vehicleicons.values()) {
+                        oldm.deleteMarker();
+                    }
+                    /* And replace with new map */
+                    vehicleicons = newmap;        
+                    // Schedule next run
+                    getServer().getScheduler().scheduleSyncDelayedTask(DynmapMobsPlugin.this, new VehicleUpdate(), vupdperiod);
+                    return;
+                }
+                else {
+                    curWorld = worldsToDo.remove(0); // Get next world
+                    vehiclesToDo = new ArrayList<Entity>(curWorld.getEntitiesByClasses(org.bukkit.entity.Vehicle.class)); // Get vehicles
+                    vehiclesIndex = 0;
+                    if ((vehiclesToDo != null) && vehiclesToDo.isEmpty()) {
+                        vehiclesToDo = null;
+                    }
+                }
+            }
+            // Process up to limit per tick
+            for (int cnt = 0; cnt < vupdates_per_tick; cnt++) {
+                if (vehiclesIndex >= vehiclesToDo.size()) {
+                    vehiclesToDo = null;
+                    break;
+                }
+                // Get next entity
+                Entity le = vehiclesToDo.get(vehiclesIndex);
+                vehiclesIndex++;
                 
+                int i;
                 /* See if entity is vehicle we care about */
                 String clsid = null;
                 if(gethandle != null) {
@@ -468,7 +529,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                     label = vehicles[i].label;
                 }
                 Location loc = le.getLocation();
-                if(w.isChunkLoaded(loc.getBlockX() >> 4, loc.getBlockZ() >> 4) == false) {
+                if(curWorld.isChunkLoaded(loc.getBlockX() >> 4, loc.getBlockZ() >> 4) == false) {
                     continue;
                 }
                 Block blk = null;
@@ -484,7 +545,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         continue;
                     }
                 }
-                
                 /* See if we already have marker */
                 double x = Math.round(loc.getX() / res) * res;
                 double y = Math.round(loc.getY() / res) * res;
@@ -496,22 +556,30 @@ public class DynmapMobsPlugin extends JavaPlugin {
                     label = label + " [" + (int)x + "," + (int)y + "," + (int)z + "]";
                 }
                 if(m == null) { /* Not found?  Need new one */
-                    m = vset.createMarker("vehicle"+le.getEntityId(), label, w.getName(), x, y, z, vehicles[i].icon, false);
+                    m = vset.createMarker("vehicle"+le.getEntityId(), label, curWorld.getName(), x, y, z, vehicles[i].icon, false);
                 }
                 else {  /* Else, update position if needed */
-                    m.setLocation(w.getName(), x, y, z);
+                    m.setLocation(curWorld.getName(), x, y, z);
                     m.setLabel(label);
                     m.setMarkerIcon(vehicles[i].icon);
                 }
                 newmap.put(le.getEntityId(), m);    /* Add to new map */
             }
+            getServer().getScheduler().scheduleSyncDelayedTask(DynmapMobsPlugin.this, this, 1);
         }
-        /* Now, review old map - anything left is gone */
-        for(Marker oldm : vehicleicons.values()) {
-            oldm.deleteMarker();
+    }
+
+    private Map<Integer, Marker> mobicons = new HashMap<Integer, Marker>();
+    private Map<Integer, Marker> vehicleicons = new HashMap<Integer, Marker>();
+    
+    private int findNext(int idx, String mobid) {
+        idx++;
+        if ((idx < mobs.length) && mobs[idx].mobid.equals(mobid)) {
+            return idx;
         }
-        /* And replace with new map */
-        vehicleicons = newmap;        
+        else {
+            return mobs.length;
+        }
     }
 
     private class OurServerListener implements Listener {
@@ -672,6 +740,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             double per = cfg.getDouble("update.period", 5.0);
             if(per < 2.0) per = 2.0;
             updperiod = (long)(per*20.0);
+            updates_per_tick = cfg.getInt("update.mobs-per-tick", 20);
             stop = false;
             getServer().getScheduler().scheduleSyncDelayedTask(this, new MobUpdate(), updperiod);
             info("Enable layer for mobs");
@@ -738,6 +807,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             double per = cfg.getDouble("update.vehicleperiod", 5.0);
             if(per < 2.0) per = 2.0;
             vupdperiod = (long)(per*20.0);
+            vupdates_per_tick = cfg.getInt("update.vehicles-per-tick", 20);
             stop = false;
             getServer().getScheduler().scheduleSyncDelayedTask(this, new VehicleUpdate(), vupdperiod / 3);
             info("Enable layer for vehicles");
