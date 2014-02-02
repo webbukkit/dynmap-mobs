@@ -235,11 +235,11 @@ public class DynmapMobsPlugin extends JavaPlugin {
             }
             while (mobsToDo == null) {
                 if (worldsToDo.isEmpty()) {
-                    /* Now, review old map - anything left is gone */
+                    // Now, review old map - anything left is gone
                     for(Marker oldm : mobicons.values()) {
                         oldm.deleteMarker();
                     }
-                    /* And replace with new map */
+                    // And replace with new map
                     mobicons = newmap;        
                     // Schedule next run
                     getServer().getScheduler().scheduleSyncDelayedTask(DynmapMobsPlugin.this, new MobUpdate(), updperiod);
@@ -454,11 +454,11 @@ public class DynmapMobsPlugin extends JavaPlugin {
             }
             while (vehiclesToDo == null) {
                 if (worldsToDo.isEmpty()) {
-                    /* Now, review old map - anything left is gone */
+                    // Now, review old map - anything left is gone
                     for(Marker oldm : vehicleicons.values()) {
                         oldm.deleteMarker();
                     }
-                    /* And replace with new map */
+                    // And replace with new map
                     vehicleicons = newmap;        
                     // Schedule next run
                     getServer().getScheduler().scheduleSyncDelayedTask(DynmapMobsPlugin.this, new VehicleUpdate(), vupdperiod);
