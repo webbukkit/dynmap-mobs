@@ -431,7 +431,9 @@ public class DynmapMobsPlugin extends JavaPlugin {
                     m.setLabel(label);
                     m.setMarkerIcon(mobs[i].icon);
                 }
-                newmap.put(le.getEntityId(), m);    /* Add to new map */
+                if (m != null) {
+                    newmap.put(le.getEntityId(), m);    /* Add to new map */
+                }
             }
             getServer().getScheduler().scheduleSyncDelayedTask(DynmapMobsPlugin.this, this, 1);
         }
