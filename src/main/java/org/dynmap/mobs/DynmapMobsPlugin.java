@@ -96,6 +96,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         boolean enabled;
         Class<Entity> mobclass;
         Class<?> entclass;
+        String cls_id;
         String entclsid;
         String label;
         MarkerIcon icon;
@@ -106,8 +107,12 @@ public class DynmapMobsPlugin extends JavaPlugin {
         @SuppressWarnings("unchecked")
         MobMapping(String id, String clsid, String lbl, String entclsid) {
             mobid = id;
+            label = lbl;
+            cls_id = clsid;
+        }
+        public void init() {
             try {
-                mobclass = (Class<Entity>) Class.forName(mapClassName(clsid));
+                mobclass = (Class<Entity>) Class.forName(mapClassName(cls_id));
             } catch (ClassNotFoundException cnfx) {
                 mobclass = null;
             }
@@ -119,7 +124,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
             } catch (ClassNotFoundException cnfx) {
                 entclass = null;
             }
-            label = lbl;
         }
     };
     MobMapping mobs[];
@@ -685,6 +689,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         Set<Class<Entity>> clsset = new HashSet<Class<Entity>>();
         int cnt = 0;
         for(int i = 0; i < configmobs.length; i++) {
+            configmobs[i].init();
             configmobs[i].enabled = cfg.getBoolean("mobs." + configmobs[i].mobid, false);
             configmobs[i].icon = markerapi.getMarkerIcon("mobs." + configmobs[i].mobid);
             InputStream in = null;
@@ -755,6 +760,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         clsset = new HashSet<Class<Entity>>();
         cnt = 0;
         for(int i = 0; i < configvehicles.length; i++) {
+            configvehicles[i].init();
             configvehicles[i].enabled = cfg.getBoolean("vehicles." + configvehicles[i].mobid, false);
             configvehicles[i].icon = markerapi.getMarkerIcon("vehicles." + configvehicles[i].mobid);
             InputStream in = null;
