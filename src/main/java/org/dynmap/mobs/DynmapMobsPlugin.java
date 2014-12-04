@@ -172,6 +172,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("mooshroom", "org.bukkit.entity.MushroomCow", "Mooshroom"),
             new MobMapping("cow", "org.bukkit.entity.Cow", "Cow"),
             new MobMapping("silverfish", "org.bukkit.entity.Silverfish", "Silverfish"),
+            new MobMapping("magmacube", "org.bukkit.entity.MagmaCube", "Magma Cube"),
             new MobMapping("slime", "org.bukkit.entity.Slime", "Slime"),
             new MobMapping("snowgolem", "org.bukkit.entity.Snowman", "Snow Golem"),
             new MobMapping("cavespider", "org.bukkit.entity.CaveSpider", "Cave Spider"),
@@ -195,7 +196,10 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("squid", "org.bukkit.entity.Squid", "Squid"),
             new MobMapping("villager", "org.bukkit.entity.Villager", "Villager"),
             new MobMapping("golem", "org.bukkit.entity.IronGolem", "Iron Golem"),
-            new MobMapping("vanillahorse", "org.bukkit.entity.Horse", "Horse")
+            new MobMapping("vanillahorse", "org.bukkit.entity.Horse", "Horse"),
+            new MobMapping("rabbit", "org.bukkit.entity.Slime", "Slime"),
+            new MobMapping("endermite", "org.bukkit.entity.Endermite", "Endermite"),
+            new MobMapping("guardian", "org.bukkit.entity.Guardian", "Guardian")
     };
     private MobMapping configvehicles[] = {
             // Explosive Minecart
@@ -681,6 +685,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         else {
             reload = true;
         }
+        this.saveDefaultConfig();
         FileConfiguration cfg = getConfig();
         cfg.options().copyDefaults(true);   /* Load defaults, if needed */
         this.saveConfig();  /* Save updates, if needed */

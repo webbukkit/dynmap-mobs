@@ -81,6 +81,14 @@ mobs:
   bat: false
   # Include horses (vanilla MC)
   vanillahorse: false
+  # Include rabbits
+  rabbit: false
+  # Include endermites
+  endermite: true
+  # Include magma cube
+  magmacube: true
+  # Include guardian
+  guardian: true
   # Mo'Creatures Mobs
   horse: false
   fireogre: false
