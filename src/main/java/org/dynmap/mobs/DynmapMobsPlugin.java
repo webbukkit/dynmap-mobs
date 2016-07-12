@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -57,6 +58,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
     long vupdperiod;
     int hideifundercover;
     int hideifshadow;
+    int withinrange;
     boolean tinyicons;
     boolean nolabels;
     boolean vtinyicons;
@@ -64,6 +66,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
     boolean inc_coord;
     boolean vinc_coord;
     boolean stop;
+    boolean iswithinrange = false;
     boolean reload = false;
     static String obcpackage;
     static String nmspackage;
@@ -408,6 +411,21 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 }
                 Location loc = le.getLocation();
                 Block blk = null;
+                Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+                iswithinrange = false;
+                if(withinrange > 0) {
+                    blk = loc.getBlock();
+                    for(Player plr : players) {
+                        if(blk.getLocation().distance(plr.getLocation()) <= withinrange) {
+                            iswithinrange = true;
+                            break;
+                        }
+                    }
+                    if(iswithinrange == false){
+                        continue;
+                    }
+                }
+                
                 if(hideifshadow < 15) {
                     blk = loc.getBlock();
                     if(blk.getLightLevel() <= hideifshadow) {
@@ -543,6 +561,23 @@ public class DynmapMobsPlugin extends JavaPlugin {
                     continue;
                 }
                 Block blk = null;
+                
+                Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+                
+                iswithinrange = false;
+                if(withinrange > 0) {
+                    blk = loc.getBlock();
+                    for(Player plr : players) {
+                        if(blk.getLocation().distance(plr.getLocation()) <= withinrange) {
+                            iswithinrange = true;
+                            break;
+                        }
+                    }
+                    if(iswithinrange == false){
+                        continue;
+                    }
+                }
+                
                 if(hideifshadow < 15) {
                     blk = loc.getBlock();
                     if(blk.getLightLevel() <= hideifshadow) {
@@ -727,6 +762,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
 
         hideifshadow = cfg.getInt("update.hideifshadow", 15);
         hideifundercover = cfg.getInt("update.hideifundercover", 15);
+        withinrange = cfg.getInt("update.withinrange", 0);
         /* Now, add marker set for mobs (make it transient) */
         if(mobs.length > 0) {
             set = markerapi.getMarkerSet("mobs.markerset");
