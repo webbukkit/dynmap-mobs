@@ -135,7 +135,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("caveogre", "org.bukkit.entity.Monster", "Cave Ogre", "net.minecraft.server.MoCEntityCaveOgre"),
             new MobMapping("ogre", "org.bukkit.entity.Monster", "Ogre", "net.minecraft.server.MoCEntityOgre"),
             new MobMapping("boar", "org.bukkit.entity.Pig", "Boar", "net.minecraft.server.MoCEntityBoar"),
-            new MobMapping("polarbear", "org.bukkit.entity.Animals", "Polar Bear", "net.minecraft.server.MoCEntityPolarBear"),
+            new MobMapping("modpolarbear", "org.bukkit.entity.Animals", "Polar Bear", "net.minecraft.server.MoCEntityPolarBear"),
             new MobMapping("bear", "org.bukkit.entity.Animals", "Bear", "net.minecraft.server.MoCEntityBear"),
             new MobMapping("duck", "org.bukkit.entity.Chicken", "Duck", "net.minecraft.server.MoCEntityDuck"),
             new MobMapping("bigcat", "org.bukkit.entity.Animals", "Big Cat", "net.minecraft.server.MoCEntityBigCat"),
@@ -183,6 +183,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("ocelot", "org.bukkit.entity.Ocelot", "Ocelot"),
             new MobMapping("cat", "org.bukkit.entity.Ocelot", "Cat"), /* Must be just after ocelot */
             new MobMapping("zombiepigman", "org.bukkit.entity.PigZombie", "Zombie Pigman"),
+            new MobMapping("polarbear", "org.bukkit.entity.PolarBear", "Polar Bear"),
             new MobMapping("creeper", "org.bukkit.entity.Creeper", "Creeper"),
             new MobMapping("skeleton", "org.bukkit.entity.Skeleton", "Skeleton"),
             new MobMapping("witherskeleton", "org.bukkit.entity.Skeleton", "Wither Skeleton"), /* Must be just after "skeleton" */
