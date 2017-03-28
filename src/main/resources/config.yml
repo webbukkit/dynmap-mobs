@@ -19,79 +19,57 @@ update:
   vehicles-per-tick: 20
 
 mobs:
-  # Include creepers
-  creeper: true
-  # Include skeletons
-  skeleton: true
-  # Include zombies
-  zombie: true
-  # Include blazes
-  blaze: true
-  # Include ghasts
-  ghast: true
-  # Include silverfish
-  silverfish: true
-  # Include slimes
-  slime: true
-  # Include spiders
-  spider: true
-  # Include wolves
-  wolf: true
-  # Include zombie-pigmen
-  zombiepigman: true
-  # Include Enderdragon
-  enderdragon: true
-  # Include snow golems
-  snowgolem: true
-  # Include cave spider
-  cavespider: true
-  # Include spider jockey
-  spiderjockey: true
-  # Include enderman
-  enderman: true
-  # Include cows
-  cow: false
-  # Include pigs
-  pig: false
-  # Include chickens
-  chicken: false
-  # Include squids
-  squid: false
-  # Include sheep
-  sheep: false
-  # Include villagers
-  villager: false
-  # Include mooshroom
-  mooshroom: false
-  # Include tamed wolves
-  tamedwolf: true  
-  # Include ocelots
-  ocelot: true
-  # Include tamed cats
-  cat: true
-  # Include Iron golems
-  golem: false
-  # Include witches
-  witch: false
-  # Include wither skeletons
+  elderguardian: true
   witherskeleton: true
-  # Include wither
-  wither: true
-  # Include zombie villager
+  stray: true
+  husk: true
   zombievillager: true
-  # Include bats
-  bat: false
-  # Include horses (vanilla MC)
-  vanillahorse: false
-  # Include rabbits
-  rabbit: false
-  # Include endermites
-  endermite: true
-  # Include magma cube
+  evoker: true
+  vex: true
+  vindicator: true
+  creeper: true
+  skeleton: true
+  giant: true
+  ghast: true
+  zombiepigman: true
+  zombie: true
+  enderman: true
+  cavespider: true
+  spider: true
+  spiderjockey: true
+  silverfish: true
+  blaze: true
   magmacube: true
-  # Include guardian
+  slime: true
+  enderdragon: true
+  wither: true
+  witch: true
+  endermite: true
   guardian: true
-  # Mo'Creatures Mobs
+  shulker: true
+  skeletonhorse: true
+  zombiehorse: true
+  donkey: true
+  mule: true
+  bat: true
+  pig: true
+  sheep: true
+  cow: true
+  chicken: true
+  chickenjockey: true
+  squid: true
+  wolf: true
+  tamedwolf: true
+  mooshroom: true
+  snowgolem: true
+  ocelot: true
+  cat: true
+  golem: true
+  vanillahorse: true
+  rabbit: true
+  vanillapolarbear: true
+  llama: true
+  villager: true
   horse: false
   fireogre: false
   caveogre: false
@@ -127,6 +105,7 @@ mobs:
 
 vehicles:
   # Specific minecart types
+  command-minecart: false
   explosive-minecart: false
   hopper-minecart: false
   powered-minecart: false
