@@ -171,6 +171,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("evoker", "org.bukkit.entity.Evoker", "Evoker"),
             new MobMapping("vex", "org.bukkit.entity.Vex", "Vex"),
             new MobMapping("vindicator", "org.bukkit.entity.Vindicator", "Vindicator"),
+            new MobMapping("illusioner", "org.bukkit.entity.Illusioner", "Illusioner"),
             new MobMapping("creeper", "org.bukkit.entity.Creeper", "Creeper"),
             new MobMapping("skeleton", "org.bukkit.entity.Skeleton", "Skeleton"),
             new MobMapping("giant", "org.bukkit.entity.Giant", "Giant"),
@@ -214,6 +215,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("rabbit", "org.bukkit.entity.Rabbit", "Rabbit"),
             new MobMapping("vanillapolarbear", "org.bukkit.entity.PolarBear", "Polar Bear"),
             new MobMapping("llama", "org.bukkit.entity.Llama", "Llama"),
+            new MobMapping("parrot", "org.bukkit.entity.Parrot", "Parrot"),
             new MobMapping("villager", "org.bukkit.entity.Villager", "Villager")
     };
     private MobMapping configvehicles[] = {

@@ -25,6 +25,7 @@ mobs:
   evoker: true
   vex: true
   vindicator: true
+  illusioner: true
   creeper: true
   skeleton: true
   giant: true
@@ -67,6 +68,7 @@ mobs:
   rabbit: true
   vanillapolarbear: true
   llama: true
+  parrot: true
   villager: true
   horse: false
   fireogre: false
