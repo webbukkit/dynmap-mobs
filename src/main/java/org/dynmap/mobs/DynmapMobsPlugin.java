@@ -18,19 +18,8 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Horse.Variant;
-import org.bukkit.entity.Skeleton.SkeletonType;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.*;
 import org.bukkit.entity.Villager.Profession;
-import org.bukkit.entity.Wolf;
-import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -46,34 +35,34 @@ import org.dynmap.markers.Marker;
 
 public class DynmapMobsPlugin extends JavaPlugin {
     private static Logger log;
-    Plugin dynmap;
-    DynmapAPI api;
-    MarkerAPI markerapi;
-    FileConfiguration cfg;
-    MarkerSet set;
-    MarkerSet vset;
-    double res; /* Position resolution */
-    long updperiod;
-    long vupdperiod;
-    int hideifundercover;
-    int hideifshadow;
-    boolean tinyicons;
-    boolean nolabels;
-    boolean vtinyicons;
-    boolean vnolabels;
-    boolean inc_coord;
-    boolean vinc_coord;
-    boolean stop;
-    boolean reload = false;
-    static String obcpackage;
-    static String nmspackage;
-    Method gethandle;
-    
-    int updates_per_tick = 20;
-    int vupdates_per_tick = 20;
-    
-    HashMap<String, Integer> lookup_cache = new HashMap<String, Integer>();
-    HashMap<String, Integer> vlookup_cache = new HashMap<String, Integer>();
+    private Plugin dynmap;
+    private DynmapAPI api;
+    private MarkerAPI markerapi;
+    private FileConfiguration cfg;
+    private MarkerSet set;
+    private MarkerSet vset;
+    private double res; /* Position resolution */
+    private long updperiod;
+    private long vupdperiod;
+    private int hideifundercover;
+    private int hideifshadow;
+    private boolean tinyicons;
+    private boolean nolabels;
+    private boolean vtinyicons;
+    private boolean vnolabels;
+    private boolean inc_coord;
+    private boolean vinc_coord;
+    private boolean stop;
+    private boolean reload = false;
+    private static String obcpackage;
+    private static String nmspackage;
+    private Method gethandle;
+
+    private int updates_per_tick = 20;
+    private int vupdates_per_tick = 20;
+
+    private HashMap<String, Integer> lookup_cache = new HashMap<String, Integer>();
+    private HashMap<String, Integer> vlookup_cache = new HashMap<String, Integer>();
     
     @Override
     public void onLoad() {
@@ -129,7 +118,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
     MobMapping mobs[];
 
     private MobMapping configmobs[] = {
-            // Mo'Creatures
+            // Mo'Creatures mobs
             new MobMapping("horse", "org.bukkit.entity.Animals", "Horse", "net.minecraft.server.MoCEntityHorse"),
             new MobMapping("fireogre", "org.bukkit.entity.Monster", "Fire Ogre", "net.minecraft.server.MoCEntityFireOgre"),
             new MobMapping("caveogre", "org.bukkit.entity.Monster", "Cave Ogre", "net.minecraft.server.MoCEntityCaveOgre"),
@@ -162,79 +151,107 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("goat", "org.bukkit.entity.Animals", "Goat", "net.minecraft.server.MoCEntityGoat"),
             new MobMapping("snake", "org.bukkit.entity.Animals", "Snake", "net.minecraft.server.MoCEntitySnake"),
             new MobMapping("ostrich", "org.bukkit.entity.Animals", "Ostrich", "net.minecraft.server.MoCEntityOstrich"),
-            // Standard hostile
-            new MobMapping("elderguardian", "org.bukkit.entity.ElderGuardian", "Elder Guardian"),
-            new MobMapping("witherskeleton", "org.bukkit.entity.WitherSkeleton", "Wither Skeleton"),
-            new MobMapping("stray", "org.bukkit.entity.Stray", "Stray"),
-            new MobMapping("husk", "org.bukkit.entity.Husk", "Husk"),
-            new MobMapping("zombievillager", "org.bukkit.entity.ZombieVillager", "Zombie Villager"),
-            new MobMapping("evoker", "org.bukkit.entity.Evoker", "Evoker"),
-            new MobMapping("vex", "org.bukkit.entity.Vex", "Vex"),
-            new MobMapping("vindicator", "org.bukkit.entity.Vindicator", "Vindicator"),
-            new MobMapping("illusioner", "org.bukkit.entity.Illusioner", "Illusioner"),
-            new MobMapping("creeper", "org.bukkit.entity.Creeper", "Creeper"),
-            new MobMapping("skeleton", "org.bukkit.entity.Skeleton", "Skeleton"),
-            new MobMapping("giant", "org.bukkit.entity.Giant", "Giant"),
-            new MobMapping("ghast", "org.bukkit.entity.Ghast", "Ghast"),
-            new MobMapping("zombiepigman", "org.bukkit.entity.PigZombie", "Zombie Pigman"),
-            new MobMapping("zombie", "org.bukkit.entity.Zombie", "Zombie"), /* Must be last zombie type */
-            new MobMapping("enderman", "org.bukkit.entity.Enderman", "Enderman"),
-            new MobMapping("cavespider", "org.bukkit.entity.CaveSpider", "Cave Spider"),
-            new MobMapping("spider", "org.bukkit.entity.Spider", "Spider"), /* Must be last spider type */
-            new MobMapping("spiderjockey", "org.bukkit.entity.Spider", "Spider Jockey"), /* Must be just after spider */
-            new MobMapping("silverfish", "org.bukkit.entity.Silverfish", "Silverfish"),
-            new MobMapping("blaze", "org.bukkit.entity.Blaze", "Blaze"),
-            new MobMapping("magmacube", "org.bukkit.entity.MagmaCube", "Magma Cube"),
-            new MobMapping("slime", "org.bukkit.entity.Slime", "Slime"), /* Must be last slime type */
-            new MobMapping("enderdragon", "org.bukkit.entity.EnderDragon", "Ender Dragon"),
-            new MobMapping("wither", "org.bukkit.entity.Wither", "Wither"),
-            new MobMapping("witch", "org.bukkit.entity.Witch", "Witch"),
-            new MobMapping("endermite", "org.bukkit.entity.Endermite", "Endermite"),
-            new MobMapping("guardian", "org.bukkit.entity.Guardian", "Guardian"),
-            new MobMapping("shulker", "org.bukkit.entity.Shulker", "Shulker"),
-            // Standard passive
-            new MobMapping("skeletonhorse", "org.bukkit.entity.SkeletonHorse", "Skeleton Horse"),
-            new MobMapping("zombiehorse", "org.bukkit.entity.ZombieHorse", "Zombie Horse"),
-            new MobMapping("donkey", "org.bukkit.entity.Donkey", "Donkey"),
-            new MobMapping("mule", "org.bukkit.entity.Mule", "Mule"),
+
+            // Minecraft subclasses
+            new MobMapping("cavespider", "org.bukkit.entity.CaveSpider", "Cave Spider"), // Subclass of spider
+            new MobMapping("elderguardian", "org.bukkit.entity.ElderGuardian", "Elder Guardian"), // Subclass of guardian
+            new MobMapping("magmacube", "org.bukkit.entity.MagmaCube", "Magma Cube"), // Subclass of slime
+            new MobMapping("husk", "org.bukkit.entity.Husk", "Husk"), // Subclass of zombie
+            new MobMapping("mooshroom", "org.bukkit.entity.MushroomCow", "Mooshroom"), // Subclass of cow
+            new MobMapping("stray", "org.bukkit.entity.Stray", "Stray"), // Subclass of skeleton
+            new MobMapping("witherskeleton", "org.bukkit.entity.WitherSkeleton", "Wither Skeleton"), // Subclass of skeleton
+            new MobMapping("zombiepigman", "org.bukkit.entity.PigZombie", "Zombie Pigman"), // Subclass of zombie
+            new MobMapping("zombievillager", "org.bukkit.entity.ZombieVillager", "Zombie Villager"), // Subclass of zombie
+
+            // Minecraft classes
             new MobMapping("bat", "org.bukkit.entity.Bat", "Bat"),
-            new MobMapping("pig", "org.bukkit.entity.Pig", "Pig"),
-            new MobMapping("sheep", "org.bukkit.entity.Sheep", "Sheep"),
-            new MobMapping("cow", "org.bukkit.entity.Cow", "Cow"),
+            new MobMapping("blaze", "org.bukkit.entity.Blaze", "Blaze"),
             new MobMapping("chicken", "org.bukkit.entity.Chicken", "Chicken"),
-            new MobMapping("chickenjockey", "org.bukkit.entity.Chicken", "Chicken Jockey"), /* Must be just after chicken */
-            new MobMapping("squid", "org.bukkit.entity.Squid", "Squid"),
-            new MobMapping("wolf", "org.bukkit.entity.Wolf", "Wolf"),
-            new MobMapping("tamedwolf", "org.bukkit.entity.Wolf", "Wolf"), /* Must be just after wolf */
-            new MobMapping("mooshroom", "org.bukkit.entity.MushroomCow", "Mooshroom"),
-            new MobMapping("snowgolem", "org.bukkit.entity.Snowman", "Snow Golem"),
-            new MobMapping("ocelot", "org.bukkit.entity.Ocelot", "Ocelot"),
-            new MobMapping("cat", "org.bukkit.entity.Ocelot", "Cat"), /* Must be just after ocelot */
-            new MobMapping("golem", "org.bukkit.entity.IronGolem", "Iron Golem"),
-            new MobMapping("vanillahorse", "org.bukkit.entity.Horse", "Horse"),
-            new MobMapping("rabbit", "org.bukkit.entity.Rabbit", "Rabbit"),
-            new MobMapping("vanillapolarbear", "org.bukkit.entity.PolarBear", "Polar Bear"),
+            new MobMapping("chickenjockey-husk", "org.bukkit.entity.Chicken", "Chicken Jockey"), // Passenger of chicken
+            new MobMapping("chickenjockey-zombie", "org.bukkit.entity.Chicken", "Chicken Jockey"), // Passenger of chicken
+            new MobMapping("chickenjockey-zombiepigman", "org.bukkit.entity.Chicken", "Chicken Jockey"), // Passenger of chicken
+            new MobMapping("chickenjockey-zombievillager", "org.bukkit.entity.Chicken", "Chicken Jockey"), // Passenger of chicken
+            new MobMapping("cow", "org.bukkit.entity.Cow", "Cow"),
+            new MobMapping("creeper", "org.bukkit.entity.Creeper", "Creeper"),
+            new MobMapping("donkey", "org.bukkit.entity.Donkey", "Donkey"),
+            new MobMapping("enderdragon", "org.bukkit.entity.EnderDragon", "Ender Dragon"),
+            new MobMapping("enderman", "org.bukkit.entity.Enderman", "Enderman"),
+            new MobMapping("endermite", "org.bukkit.entity.Endermite", "Endermite"),
+            new MobMapping("evoker", "org.bukkit.entity.Evoker", "Evoker"),
+            new MobMapping("ghast", "org.bukkit.entity.Ghast", "Ghast"),
+            new MobMapping("giant", "org.bukkit.entity.Giant", "Giant"),
+            new MobMapping("guardian", "org.bukkit.entity.Guardian", "Guardian"),
+            new MobMapping("illusioner", "org.bukkit.entity.Illusioner", "Illusioner"),
+            new MobMapping("irongolem", "org.bukkit.entity.IronGolem", "Iron Golem"),
             new MobMapping("llama", "org.bukkit.entity.Llama", "Llama"),
+            new MobMapping("mule", "org.bukkit.entity.Mule", "Mule"),
+            new MobMapping("ocelot", "org.bukkit.entity.Ocelot", "Ocelot"),
+            new MobMapping("cat", "org.bukkit.entity.Ocelot", "Cat"), // Type of ocelot
+            new MobMapping("cat-siamese", "org.bukkit.entity.Ocelot", "Siamese Cat"), // Type of ocelot
+            new MobMapping("cat-tabby", "org.bukkit.entity.Ocelot", "Tabby Cat"), // Type of ocelot
+            new MobMapping("cat-tuxedo", "org.bukkit.entity.Ocelot", "Tuxedo Cat"), // Type of ocelot
             new MobMapping("parrot", "org.bukkit.entity.Parrot", "Parrot"),
-            new MobMapping("villager", "org.bukkit.entity.Villager", "Villager")
+            new MobMapping("pig", "org.bukkit.entity.Pig", "Pig"),
+            new MobMapping("rabbit", "org.bukkit.entity.Rabbit", "Rabbit"),
+            new MobMapping("killerbunny", "org.bukkit.entity.Rabbit", "Killer Bunny"), // Type of rabbit
+            new MobMapping("sheep", "org.bukkit.entity.Sheep", "Sheep"),
+            new MobMapping("shulker", "org.bukkit.entity.Shulker", "Shulker"),
+            new MobMapping("silverfish", "org.bukkit.entity.Silverfish", "Silverfish"),
+            new MobMapping("skeleton", "org.bukkit.entity.Skeleton", "Skeleton"),
+            new MobMapping("skeletonhorse", "org.bukkit.entity.SkeletonHorse", "Skeleton Horse"),
+            new MobMapping("skeletonhorseman", "org.bukkit.entity.SkeletonHorse", "Skeleton Horseman"), // Passenger of skeletonhorse
+            new MobMapping("slime", "org.bukkit.entity.Slime", "Slime"),
+            new MobMapping("snowgolem", "org.bukkit.entity.Snowman", "Snow Golem"),
+            new MobMapping("spider", "org.bukkit.entity.Spider", "Spider"),
+            new MobMapping("spiderjockey-skeleton", "org.bukkit.entity.Spider", "Spider Jockey"), // Passenger of spider
+            new MobMapping("spiderjockey-witherskeleton", "org.bukkit.entity.Spider", "Spider Jockey"), // Passenger of spider
+            new MobMapping("squid", "org.bukkit.entity.Squid", "Squid"),
+            new MobMapping("vanillahorse", "org.bukkit.entity.Horse", "Horse"),
+            new MobMapping("vanillapolarbear", "org.bukkit.entity.PolarBear", "Polar Bear"),
+            new MobMapping("vex", "org.bukkit.entity.Vex", "Vex"),
+            new MobMapping("villager", "org.bukkit.entity.Villager", "Villager"),
+            new MobMapping("vindicator", "org.bukkit.entity.Vindicator", "Vindicator"),
+            new MobMapping("witch", "org.bukkit.entity.Witch", "Witch"),
+            new MobMapping("wither", "org.bukkit.entity.Wither", "Wither"),
+            new MobMapping("wolf", "org.bukkit.entity.Wolf", "Wolf"),
+            new MobMapping("wolf-hostile", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-black", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-red", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-green", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-brown", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-blue", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-purple", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-cyan", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-lightgray", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-gray", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-pink", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-lime", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-yellow", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-lightblue", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-magenta", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-orange", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("wolf-tamed-white", "org.bukkit.entity.Wolf", "Wolf"), // Type of wolf
+            new MobMapping("zombie", "org.bukkit.entity.Zombie", "Zombie"),
+            new MobMapping("zombiehorse", "org.bukkit.entity.ZombieHorse", "Zombie Horse")
     };
     private MobMapping configvehicles[] = {
-            // Command Minecart
-            new MobMapping("command-minecart", "org.bukkit.entity.minecart.CommandMinecart", "Command Minecart"),
-            // Explosive Minecart
-            new MobMapping("explosive-minecart", "org.bukkit.entity.minecart.ExplosiveMinecart", "Explosive Minecart"),
-            // Hopper Minecart
-            new MobMapping("hopper-minecart", "org.bukkit.entity.minecart.HopperMinecart", "Hopper Minecart"),
-            // Powered Minecart
-            new MobMapping("powered-minecart", "org.bukkit.entity.minecart.PoweredMinecart", "Powered Minecart"),
-            // Rideable Minecart
+            // Minecarts
+            new MobMapping("minecart-command", "org.bukkit.entity.minecart.CommandMinecart", "Command Minecart"),
+            new MobMapping("minecart-explosive", "org.bukkit.entity.minecart.ExplosiveMinecart", "Explosive Minecart"),
+            new MobMapping("minecart-hopper", "org.bukkit.entity.minecart.HopperMinecart", "Hopper Minecart"),
+            new MobMapping("minecart-powered", "org.bukkit.entity.minecart.PoweredMinecart", "Powered Minecart"),
+            new MobMapping("minecart-spawner", "org.bukkit.entity.minecart.SpawnerMinecart", "Spawner Minecart"),
+            new MobMapping("minecart-storage", "org.bukkit.entity.minecart.StorageMinecart", "Storage Minecart"),
             new MobMapping("minecart", "org.bukkit.entity.minecart.RideableMinecart", "Minecart"),
-            // Spawner Minecart
-            new MobMapping("spawner-minecart", "org.bukkit.entity.minecart.SpawnerMinecart", "Spawner Minecart"),
-            // Storage Minecart
-            new MobMapping("storage-minecart", "org.bukkit.entity.minecart.StorageMinecart", "Storage Minecart"),
-            // Boat
-            new MobMapping("boat", "org.bukkit.entity.Boat", "Boat")
+            // Boats
+            new MobMapping("boat", "org.bukkit.entity.Boat", "Boat"),
+            new MobMapping("boat-oak", "org.bukkit.entity.Boat", "Oak Boat"), // Type of boat
+            new MobMapping("boat-spruce", "org.bukkit.entity.Boat", "Spruce Boat"), // Type of boat
+            new MobMapping("boat-birch", "org.bukkit.entity.Boat", "Birch Boat"), // Type of boat
+            new MobMapping("boat-jungle", "org.bukkit.entity.Boat", "Jungle Boat"), // Type of boat
+            new MobMapping("boat-acacia", "org.bukkit.entity.Boat", "Acacia Boat"), // Type of boat
+            new MobMapping("boat-darkoak", "org.bukkit.entity.Boat", "Dark Oak Boat") // Type of boat
     };
     MobMapping vehicles[];
     
@@ -332,36 +349,146 @@ public class DynmapMobsPlugin extends JavaPlugin {
                     continue;
                 }
 
+                if (le instanceof Zombie || le instanceof Skeleton) {
+                    if (le.isInsideVehicle())
+                        continue;
+                }
+
                 String label = null;
                 if(mobs[i].mobid.equals("spider")) {    /* Check for jockey */
                     if(le.getPassenger() != null) { /* Has passenger? */
-                        i = findNext(i, "spiderjockey");    /* Make jockey */
+                        switch (le.getPassenger().getType()) {
+                            case SKELETON:
+                                i = find(i, "spiderjockey-skeleton");
+                                break;
+                            case WITHER_SKELETON:
+                                i = find(i, "spiderjockey-witherskeleton");
+                                break;
+                        }
                     }
                 }
                 else if(mobs[i].mobid.equals("chicken")) {    /* Check for jockey */
                     if(le.getPassenger() != null) { /* Has passenger? */
-                        i = findNext(i, "chickenjockey");    /* Make jockey */
+                        switch (le.getPassenger().getType()) {
+                            case HUSK:
+                                i = find(i, "chickenjockey-husk");
+                                break;
+                            case ZOMBIE:
+                                i = find(i, "chickenjockey-zombie");
+                                break;
+                            case PIG_ZOMBIE:
+                                i = find(i, "chickenjockey-zombiepigman");
+                                break;
+                            case ZOMBIE_VILLAGER:
+                                i = find(i, "chickenjockey-zombievillager");
+                                break;
+                        }
                     }
                 }
-                else if(mobs[i].mobid.equals("wolf")) { /* Check for tamed wolf */
+                else if(mobs[i].mobid.equals("wolf")) { /* Check for hostile or tamed wolf */
                     Wolf wolf = (Wolf)le;
+                    if(wolf.isAngry()) {
+                        i = find(i, "wolf-hostile");
+                    }
                     if(wolf.isTamed()) {
-                        i = findNext(i, "tamedwolf");
+                        i = find(i, "wolf-tamed");
                         AnimalTamer t = wolf.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Wolf (" + ((OfflinePlayer)t).getName() + ")";
+                        }
+                        if (wolf.getCollarColor() != null) {
+                            switch (wolf.getCollarColor()) {
+                                case BLACK:
+                                    i = find(i, "wolf-tamed-black");
+                                    break;
+                                case RED:
+                                    i = find(i, "wolf-tamed-red");
+                                    break;
+                                case GREEN:
+                                    i = find(i, "wolf-tamed-green");
+                                    break;
+                                case BROWN:
+                                    i = find(i, "wolf-tamed-brown");
+                                    break;
+                                case BLUE:
+                                    i = find(i, "wolf-tamed-blue");
+                                    break;
+                                case PURPLE:
+                                    i = find(i, "wolf-tamed-purple");
+                                    break;
+                                case CYAN:
+                                    i = find(i, "wolf-tamed-cyan");
+                                    break;
+                                case SILVER:
+                                    i = find(i, "wolf-tamed-lightgray");
+                                    break;
+                                case GRAY:
+                                    i = find(i, "wolf-tamed-gray");
+                                    break;
+                                case PINK:
+                                    i = find(i, "wolf-tamed-pink");
+                                    break;
+                                case LIME:
+                                    i = find(i, "wolf-tamed-lime");
+                                    break;
+                                case YELLOW:
+                                    i = find(i, "wolf-tamed-yellow");
+                                    break;
+                                case LIGHT_BLUE:
+                                    i = find(i, "wolf-tamed-lightblue");
+                                    break;
+                                case MAGENTA:
+                                    i = find(i, "wolf-tamed-magenta");
+                                    break;
+                                case ORANGE:
+                                    i = find(i, "wolf-tamed-orange");
+                                    break;
+                                case WHITE:
+                                    i = find(i, "wolf-tamed-white");
+                                    break;
+                            }
                         }
                     }
                 }
                 else if(mobs[i].mobid.equals("ocelot")) { /* Check for tamed ocelot */
                     Ocelot cat = (Ocelot)le;
                     if(cat.isTamed()) {
-                        i = findNext(i, "cat");
+                        i = find(i, "cat");
                         AnimalTamer t = cat.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Cat (" + ((OfflinePlayer)t).getName() + ")";
                         }
+                        if (cat.getCatType() != null) {
+                            switch (cat.getCatType()) {
+                                case BLACK_CAT:
+                                    i = find(i, "cat-tuxedo");
+                                    label = "Tuxedo Cat (" + ((OfflinePlayer) t).getName() + ")";
+                                    break;
+                                case RED_CAT:
+                                    i = find(i, "cat-tabby");
+                                    label = "Tabby Cat (" + ((OfflinePlayer) t).getName() + ")";
+                                    break;
+                                case SIAMESE_CAT:
+                                    i = find(i, "cat-siamese");
+                                    label = "Siamese Cat (" + ((OfflinePlayer) t).getName() + ")";
+                                    break;
+                            }
+                        }
                     }
+                }
+                else if (mobs[i].mobid.equals("parrot")) { /* Check for tamed parrot */
+                    Parrot parrot = (Parrot)le;
+                    if (parrot.isTamed()) {
+                        AnimalTamer t = parrot.getOwner();
+                        if((t != null) && (t instanceof OfflinePlayer)) {
+                            label = "Parrot (" + ((OfflinePlayer)t).getName() + ")";
+                        }
+                    }
+                }
+                else if (mobs[i].mobid.equals("rabbit")) { /* Check for killer bunny */
+                    Rabbit rabbit = (Rabbit)le;
+                    if (rabbit.getRabbitType() == Rabbit.Type.THE_KILLER_BUNNY)
+                        i = find(i, "killerbunny");
                 }
                 else if(mobs[i].mobid.equals("villager")) {
                     Villager v = (Villager)le;
@@ -389,11 +516,13 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         }
                     }
                 }                
-                else if(mobs[i].mobid.equals("vanillahorse") || mobs[i].mobid.equals("donkey") || mobs[i].mobid.equals("mule") || mobs[i].mobid.equals("zombiehorse") || mobs[i].mobid.equals("skeletonhorse")) {    /* Check for rider */
+                else if(mobs[i].mobid.equals("vanillahorse") || mobs[i].mobid.equals("donkey") || mobs[i].mobid.equals("mule") || mobs[i].mobid.equals("zombiehorse") || mobs[i].mobid.equals("skeletonhorse")) {
                     if(le.getPassenger() != null) { /* Has passenger? */
                         Entity e = le.getPassenger();
                         if (e instanceof Player) {
                             label = label + " (" + ((Player)e).getName() + ")";
+                        } else if (e instanceof Skeleton) {
+                            i = find(i, "skeletonhorseman");
                         }
                     }
                 }
@@ -529,6 +658,31 @@ public class DynmapMobsPlugin extends JavaPlugin {
                     continue;
                 }
                 String label = null;
+
+                if (vehicles[i].mobid.equals("boat")) {
+                    Boat boat = (Boat)le;
+                    switch (boat.getWoodType()) {
+                        case GENERIC:
+                            i = findVehicle(i, "boat-oak");
+                            break;
+                        case REDWOOD:
+                            i = findVehicle(i, "boat-spruce");
+                            break;
+                        case BIRCH:
+                            i = findVehicle(i, "boat-birch");
+                            break;
+                        case JUNGLE:
+                            i = findVehicle(i, "boat-jungle");
+                            break;
+                        case ACACIA:
+                            i = findVehicle(i, "boat-acacia");
+                            break;
+                        case DARK_OAK:
+                            i = findVehicle(i, "boat-darkoak");
+                            break;
+                    }
+                }
+
                 if(i >= vehicles.length) {
                     continue;
                 }
@@ -579,14 +733,20 @@ public class DynmapMobsPlugin extends JavaPlugin {
     private Map<Integer, Marker> mobicons = new HashMap<Integer, Marker>();
     private Map<Integer, Marker> vehicleicons = new HashMap<Integer, Marker>();
     
-    private int findNext(int idx, String mobid) {
-        idx++;
-        if ((idx < mobs.length) && mobs[idx].mobid.equals(mobid)) {
-            return idx;
+    private int find(int idx, String mobid) {
+        for (int i = 0; i < mobs.length; ++i) {
+            if (mobs[i].mobid.equals(mobid))
+                return i;
         }
-        else {
-            return mobs.length;
+        return mobs.length;
+    }
+
+    private int findVehicle(int idx, String mobid) {
+        for (int i = 0; i < vehicles.length; ++i) {
+            if (vehicles[i].mobid.equals(mobid))
+                return i;
         }
+        return vehicles.length;
     }
 
     private class OurServerListener implements Listener {

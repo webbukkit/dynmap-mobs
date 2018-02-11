@@ -17,59 +17,86 @@ update:
   vehicles-per-tick: 20
 
 mobs:
-  elderguardian: true
-  witherskeleton: true
-  stray: true
-  husk: true
-  zombievillager: true
-  evoker: true
-  vex: true
-  vindicator: true
-  illusioner: true
-  creeper: true
-  skeleton: true
-  giant: true
-  ghast: true
-  zombiepigman: true
-  zombie: true
-  enderman: true
-  cavespider: true
-  spider: true
-  spiderjockey: true
-  silverfish: true
-  blaze: true
-  magmacube: true
-  slime: true
-  enderdragon: true
-  wither: true
-  witch: true
-  endermite: true
-  guardian: true
-  shulker: true
-  skeletonhorse: true
-  zombiehorse: true
-  donkey: true
-  mule: true
   bat: true
-  pig: true
-  sheep: true
-  cow: true
-  chicken: true
-  chickenjockey: true
-  squid: true
-  wolf: true
-  tamedwolf: true
-  mooshroom: true
-  snowgolem: true
-  ocelot: true
+  blaze: true
   cat: true
-  golem: true
-  vanillahorse: true
-  rabbit: true
-  vanillapolarbear: true
+  cat-siamese: true
+  cat-tabby: true
+  cat-tuxedo: true
+  cavespider: true
+  chicken: true
+  chickenjockey-husk: true
+  chickenjockey-zombie: true
+  chickenjockey-zombiepigman: true
+  chickenjockey-zombievillager: true
+  cow: true
+  creeper: true
+  donkey: true
+  elderguardian: true
+  enderdragon: true
+  enderman: true
+  endermite: true
+  evoker: true
+  ghast: true
+  giant: true
+  guardian: true
+  husk: true
+  illusioner: true
+  irongolem: true
+  killerbunny: true
   llama: true
+  magmacube: true
+  mooshroom: true
+  mule: true
+  ocelot: true
   parrot: true
+  pig: true
+  rabbit: true
+  sheep: true
+  shulker: true
+  silverfish: true
+  skeleton: true
+  skeletonhorse: true
+  skeletonhorseman: true
+  slime: true
+  snowgolem: true
+  spider: true
+  spiderjockey-skeleton: true
+  spiderjockey-witherskeleton: true
+  squid: true
+  stray: true
+  vanillahorse: true
+  vanillapolarbear: true
+  vex: true
   villager: true
+  vindicator: true
+  witch: true
+  wither: true
+  witherskeleton: true
+  wolf: true
+  wolf-hostile: true
+  wolf-tamed: true
+  wolf-tamed-black: true
+  wolf-tamed-red: true
+  wolf-tamed-green: true
+  wolf-tamed-brown: true
+  wolf-tamed-blue: true
+  wolf-tamed-purple: true
+  wolf-tamed-cyan: true
+  wolf-tamed-lightgray: true
+  wolf-tamed-gray: true
+  wolf-tamed-pink: true
+  wolf-tamed-lime: true
+  wolf-tamed-yellow: true
+  wolf-tamed-lightblue: true
+  wolf-tamed-magenta: true
+  wolf-tamed-orange: true
+  wolf-tamed-white: true
+  zombie: true
+  zombiehorse: true
+  zombiepigman: true
+  zombievillager: true
+  # Mo'Creatures
   horse: false
   fireogre: false
   caveogre: false
@@ -104,15 +131,21 @@ mobs:
   ostrich: false
 
 vehicles:
-  # Specific minecart types
-  command-minecart: false
-  explosive-minecart: false
-  hopper-minecart: false
-  powered-minecart: false
-  spawner-minecart: false
-  storage-minecart: false
+  # Minecarts
+  minecart-command: false
+  minecart-explosive: false
+  minecart-hopper: false
+  minecart-powered: false
+  minecart-spawner: false
+  minecart-storage: false
   minecart: false
   # Boats
+  boat-oak: false
+  boat-spruce: false
+  boat-birch: false
+  boat-jungle: false
+  boat-acacia: false
+  boat-darkoak: false
   boat: false
   
 layer:
