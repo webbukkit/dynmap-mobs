@@ -18,19 +18,8 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Horse.Variant;
-import org.bukkit.entity.Skeleton.SkeletonType;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.*;
 import org.bukkit.entity.Villager.Profession;
-import org.bukkit.entity.Wolf;
-import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -175,6 +164,8 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("skeleton", "org.bukkit.entity.Skeleton", "Skeleton"),
             new MobMapping("giant", "org.bukkit.entity.Giant", "Giant"),
             new MobMapping("ghast", "org.bukkit.entity.Ghast", "Ghast"),
+            new MobMapping("drowned", "org.bukkit.entity.Drowned", "Drowned"),
+            new MobMapping("phantom", "org.bukkit.entity.Phantom", "Phantom"),
             new MobMapping("zombiepigman", "org.bukkit.entity.PigZombie", "Zombie Pigman"),
             new MobMapping("zombie", "org.bukkit.entity.Zombie", "Zombie"), /* Must be last zombie type */
             new MobMapping("enderman", "org.bukkit.entity.Enderman", "Enderman"),
@@ -214,7 +205,14 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("rabbit", "org.bukkit.entity.Rabbit", "Rabbit"),
             new MobMapping("vanillapolarbear", "org.bukkit.entity.PolarBear", "Polar Bear"),
             new MobMapping("llama", "org.bukkit.entity.Llama", "Llama"),
-            new MobMapping("villager", "org.bukkit.entity.Villager", "Villager")
+            new MobMapping("villager", "org.bukkit.entity.Villager", "Villager"),
+            new MobMapping("vanilladolphin", "org.bukkit.entity.Dolphin", "Dolphin"),
+            new MobMapping("cod", "org.bukkit.entity.Cod", "Cod"),
+            new MobMapping("salmon", "org.bukkit.entity.Salmon", "Salmon"),
+            new MobMapping("pufferfish", "org.bukkit.entity.PufferFish", "Pufferfish"),
+            new MobMapping("tropicalfish", "org.bukkit.entity.TropicalFish", "Tropical Fish"),
+            new MobMapping("vanillaturtle", "org.bukkit.entity.Turtle", "Turtle"),
+            new MobMapping("parrot", "org.bukkit.entity.Parrot", "Parrot"),
     };
     private MobMapping configvehicles[] = {
             // Command Minecart
@@ -395,6 +393,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         }
                     }
                 }
+
                 if(i >= mobs.length) {
                     continue;
                 }

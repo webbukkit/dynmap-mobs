@@ -29,6 +29,8 @@ mobs:
   skeleton: true
   giant: true
   ghast: true
+  drowned: true
+  phantom: true
   zombiepigman: true
   zombie: true
   enderman: true
@@ -68,6 +70,13 @@ mobs:
   vanillapolarbear: true
   llama: true
   villager: true
+  vanilladolphin: true
+  cod: true
+  salmon: true
+  pufferfish: true
+  tropicalfish: true
+  vanillaturtle: true
+  parrot: true
   horse: false
   fireogre: false
   caveogre: false
