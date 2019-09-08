@@ -76,6 +76,13 @@ mobs:
   pufferfish: true
   tropicalfish: true
   vanillaturtle: true
+  vanillafox: true
+  panda: true
+  wandering_trader: true
+  tradderllama: true
+  pillager: true
+  illusioner: true
+  ravager: true
   parrot: true
   horse: false
   fireogre: false
