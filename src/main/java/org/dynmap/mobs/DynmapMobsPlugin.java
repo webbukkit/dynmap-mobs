@@ -121,11 +121,11 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("bigcat", "org.bukkit.entity.Animals", "Big Cat", "net.minecraft.server.MoCEntityBigCat"),
             new MobMapping("deer", "org.bukkit.entity.Animals", "Deer", "net.minecraft.server.MoCEntityDeer"),
             new MobMapping("wildwolf", "org.bukkit.entity.Monster", "Wild Wolf", "net.minecraft.server.MoCEntityWWolf"),
-            new MobMapping("flamewraith", "org.bukkit.entity.Monster", "Wraith", "net.minecraft.server.MoCEntityFlameWraith"),
+            new MobMapping("flamewraith", "org.bukkit.entity.Monster", "Flame Wraith", "net.minecraft.server.MoCEntityFlameWraith"),
             new MobMapping("wraith", "org.bukkit.entity.Monster", "Wraith", "net.minecraft.server.MoCEntityWraith"),
             new MobMapping("bunny", "org.bukkit.entity.Animals", "Bunny", "net.minecraft.server.MoCEntityBunny"),
             new MobMapping("bird", "org.bukkit.entity.Animals", "Bird", "net.minecraft.server.MoCEntityBird"),
-            new MobMapping("fox", "org.bukkit.entity.Animals", "Bird", "net.minecraft.server.MoCEntityFox"),
+            new MobMapping("fox", "org.bukkit.entity.Animals", "Fox", "net.minecraft.server.MoCEntityFox"),
             new MobMapping("werewolf", "org.bukkit.entity.Monster", "Werewolf", "net.minecraft.server.MoCEntityWerewolf"),
             new MobMapping("shark", "org.bukkit.entity.WaterMob", "Shark", "net.minecraft.server.MoCEntityShark"),
             new MobMapping("dolphin", "org.bukkit.entity.WaterMob", "Shark", "net.minecraft.server.MoCEntityDolphin"),
@@ -173,6 +173,9 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("endermite", "org.bukkit.entity.Endermite", "Endermite"),
             new MobMapping("guardian", "org.bukkit.entity.Guardian", "Guardian"),
             new MobMapping("shulker", "org.bukkit.entity.Shulker", "Shulker"),
+            new MobMapping("ravager", "org.bukkit.entity.Ravager", "Ravager"),
+            new MobMapping("illusioner", "org.bukkit.entity.Illusioner", "Illusioner"),
+            new MobMapping("pillager", "org.bukkit.entity.Pillager", "Pillager"),
             // Standard passive
             new MobMapping("skeletonhorse", "org.bukkit.entity.SkeletonHorse", "Skeleton Horse"),
             new MobMapping("zombiehorse", "org.bukkit.entity.ZombieHorse", "Zombie Horse"),
@@ -190,12 +193,14 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("mooshroom", "org.bukkit.entity.MushroomCow", "Mooshroom"),
             new MobMapping("snowgolem", "org.bukkit.entity.Snowman", "Snow Golem"),
             new MobMapping("ocelot", "org.bukkit.entity.Ocelot", "Ocelot"),
-            new MobMapping("cat", "org.bukkit.entity.Ocelot", "Cat"), /* Must be just after ocelot */
+            new MobMapping("cat", "org.bukkit.entity.Cat", "Cat"),
             new MobMapping("golem", "org.bukkit.entity.IronGolem", "Iron Golem"),
             new MobMapping("vanillahorse", "org.bukkit.entity.Horse", "Horse"),
             new MobMapping("rabbit", "org.bukkit.entity.Rabbit", "Rabbit"),
             new MobMapping("vanillapolarbear", "org.bukkit.entity.PolarBear", "Polar Bear"),
             new MobMapping("llama", "org.bukkit.entity.Llama", "Llama"),
+            new MobMapping("traderllama", "org.bukkit.entity.TraderLlama", "Trader Llama"),
+            new MobMapping("wandering_trader", "org.bukkit.entity.WanderingTrader", "Wandering Trader"),
             new MobMapping("villager", "org.bukkit.entity.Villager", "Villager"),
             new MobMapping("vanilladolphin", "org.bukkit.entity.Dolphin", "Dolphin"),
             new MobMapping("cod", "org.bukkit.entity.Cod", "Cod"),
@@ -204,6 +209,8 @@ public class DynmapMobsPlugin extends JavaPlugin {
             new MobMapping("tropicalfish", "org.bukkit.entity.TropicalFish", "Tropical Fish"),
             new MobMapping("vanillaturtle", "org.bukkit.entity.Turtle", "Turtle"),
             new MobMapping("parrot", "org.bukkit.entity.Parrot", "Parrot"),
+            new MobMapping("panda", "org.bukkit.entity.Panda", "Panda"),
+            new MobMapping("vanillafox", "org.bukkit.entity.Fox", "Fox" ),
     };
     private MobMapping configvehicles[] = {
             // Command Minecart
