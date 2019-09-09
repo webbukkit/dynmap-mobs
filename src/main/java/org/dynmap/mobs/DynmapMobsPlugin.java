@@ -347,8 +347,8 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         }
                     }
                 }
-                else if(mobs[i].mobid.equals("ocelot")) { /* Check for tamed ocelot */
-                    Ocelot cat = (Ocelot)le;
+                else if(mobs[i].mobid.equals("cat")) { /* Check for tamed cat */
+                    Cat cat = (Cat)le;
                     if(cat.isTamed()) {
                         i = findNext(i, "cat");
                         AnimalTamer t = cat.getOwner();
@@ -357,33 +357,100 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         }
                     }
                 }
+                else if(mobs[i].mobid.equals("horse")) { /* Check for tamed cat */
+                    Horse horse = (Horse)le;
+                    if(horse.isTamed()) {
+                        i = findNext(i, "horse");
+                        AnimalTamer t = horse.getOwner();
+                        if((t != null) && (t instanceof OfflinePlayer)) {
+                            label = "Horse (" + ((OfflinePlayer)t).getName() + ")";
+                        }
+                    }
+                }
+                else if(mobs[i].mobid.equals("traderllama")) { /* Check for tamed cat */
+                    TraderLlama traderllama = (TraderLlama)le;
+                    if(traderllama.isTamed()) {
+                        i = findNext(i, "traderllama");
+                        AnimalTamer t = traderllama.getOwner();
+                        if((t != null) && (t instanceof OfflinePlayer)) {
+                            label = "TraderLlama (" + ((OfflinePlayer)t).getName() + ")";
+                        }
+                    }
+                }
+                else if(mobs[i].mobid.equals("llama")) { /* Check for tamed cat */
+                    Llama llama = (Llama)le;
+                    if(llama.isTamed()) {
+                        i = findNext(i, "llama");
+                        AnimalTamer t = llama.getOwner();
+                        if((t != null) && (t instanceof OfflinePlayer)) {
+                            label = "Llama (" + ((OfflinePlayer)t).getName() + ")";
+                        }
+                    }
+                }
+                else if(mobs[i].mobid.equals("parrot")) { /* Check for tamed cat */
+                    Parrot parrot = (Parrot)le;
+                    if(parrot.isTamed()) {
+                        i = findNext(i, "parrot");
+                        AnimalTamer t = parrot.getOwner();
+                        if((t != null) && (t instanceof OfflinePlayer)) {
+                            label = "Parrot (" + ((OfflinePlayer)t).getName() + ")";
+                        }
+                    }
+                }
                 else if(mobs[i].mobid.equals("villager")) {
                     Villager v = (Villager)le;
                     Profession p = v.getProfession();
                     if(p != null) {
                         switch(p) {
-                            case BLACKSMITH:
-                                label = "Blacksmith";
+                            case NONE:
+                                label = "Villager";
+                                break;
+                            case ARMORER:
+                                label = "Armorer";
                                 break;
                             case BUTCHER:
                                 label = "Butcher";
                                 break;
+                            case CARTOGRAPHER:
+                                label = "Cartographer";
+                                break;
+                            case CLERIC:
+                                label = "Cleric";
+                                break;
                             case FARMER:
                                 label = "Farmer";
+                                break;
+                            case FISHERMAN:
+                                label = "Fisherman";
+                                break;
+                            case FLETCHER:
+                                label = "Fletcher";
+                                break;
+                            case LEATHERWORKER:
+                                label = "Leatherworker";
                                 break;
                             case LIBRARIAN:
                                 label = "Librarian";
                                 break;
+                            case MASON:
+                                label = "Mason";
+                                break;
                             case NITWIT:
                                 label = "Nitwit";
                                 break;
-                            case PRIEST:
-                                label = "Priest";
+                            case SHEPHERD:
+                                label = "Shepherd";
+                                break;
+                            case TOOLSMITH:
+                                label = "Toolsmith";
+                                break;
+                            case WEAPONSMITH:
+                                label = "Weaponsmith";
                                 break;
                         }
                     }
                 }                
-                else if(mobs[i].mobid.equals("vanillahorse") || mobs[i].mobid.equals("donkey") || mobs[i].mobid.equals("mule") || mobs[i].mobid.equals("zombiehorse") || mobs[i].mobid.equals("skeletonhorse")) {    /* Check for rider */
+                else if(mobs[i].mobid.equals("vanillahorse") || mobs[i].mobid.equals("llama") || mobs[i].mobid.equals("traderllama") || mobs[i].mobid.equals("donkey") || mobs[i].mobid.equals("mule") || mobs[i].mobid.equals("zombiehorse") || mobs[i].mobid.equals("skeletonhorse")) {    /* Check for rider */
                     if(le.getPassenger() != null) { /* Has passenger? */
                         Entity e = le.getPassenger();
                         if (e instanceof Player) {
