@@ -357,7 +357,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         }
                     }
                 }
-                else if(mobs[i].mobid.equals("horse")) { /* Check for tamed cat */
+                else if(mobs[i].mobid.equals("horse")) { /* Check for tamed horse */
                     Horse horse = (Horse)le;
                     if(horse.isTamed()) {
                         i = findNext(i, "horse");
@@ -367,7 +367,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         }
                     }
                 }
-                else if(mobs[i].mobid.equals("traderllama")) { /* Check for tamed cat */
+                else if(mobs[i].mobid.equals("traderllama")) { /* Check for tamed traderllama */
                     TraderLlama traderllama = (TraderLlama)le;
                     if(traderllama.isTamed()) {
                         i = findNext(i, "traderllama");
@@ -377,7 +377,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         }
                     }
                 }
-                else if(mobs[i].mobid.equals("llama")) { /* Check for tamed cat */
+                else if(mobs[i].mobid.equals("llama")) { /* Check for tamed llama */
                     Llama llama = (Llama)le;
                     if(llama.isTamed()) {
                         i = findNext(i, "llama");
@@ -387,7 +387,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                         }
                     }
                 }
-                else if(mobs[i].mobid.equals("parrot")) { /* Check for tamed cat */
+                else if(mobs[i].mobid.equals("parrot")) { /* Check for tamed parrot */
                     Parrot parrot = (Parrot)le;
                     if(parrot.isTamed()) {
                         i = findNext(i, "parrot");
