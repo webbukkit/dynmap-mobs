@@ -230,8 +230,8 @@ public class DynmapMobsPlugin extends JavaPlugin {
         new MobMapping("parrot", "org.bukkit.entity.Parrot", "Parrot"),
         new MobMapping("panda", "org.bukkit.entity.Panda", "Panda"),
         new MobMapping("vanillafox", "org.bukkit.entity.Fox", "Fox" )
-    };
 
+    };
 
     private MobMapping config_vehicles[] = {
             // Command Minecart
@@ -251,8 +251,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             // Boat
             new MobMapping("boat", "org.bukkit.entity.Boat", "Boat")
     };
-    
-    
+        
     public static void info(String msg) {
         log.log(Level.INFO, msg);
     }
