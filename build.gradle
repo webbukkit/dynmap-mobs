@@ -2,9 +2,9 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'dynmap-mobs'
-version = '1.5-gabsoftware'
+version = '1.6-gabsoftware'
 
-description = "Unofficial build with 1.14 support"
+description = "Unofficial build with 1.15.1 support"
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -21,6 +21,6 @@ repositories {
      maven { url "https://repo.maven.apache.org/maven2" }
 }
 dependencies {
-    compile group: 'org.bukkit', name: 'bukkit', version:'1.14.4-R0.1-SNAPSHOT'
+    compile group: 'org.bukkit', name: 'bukkit', version:'1.15.1-R0.1-SNAPSHOT'
     compile group: 'us.dynmap', name: 'dynmap-api', version:'3.0-SNAPSHOT'
 }

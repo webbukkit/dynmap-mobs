@@ -229,7 +229,8 @@ public class DynmapMobsPlugin extends JavaPlugin {
         new MobMapping("vanillaturtle", "org.bukkit.entity.Turtle", "Turtle"),
         new MobMapping("parrot", "org.bukkit.entity.Parrot", "Parrot"),
         new MobMapping("panda", "org.bukkit.entity.Panda", "Panda"),
-        new MobMapping("vanillafox", "org.bukkit.entity.Fox", "Fox" )
+        new MobMapping("vanillafox", "org.bukkit.entity.Fox", "Fox" ),
+        new MobMapping("bee", "org.bukkit.entity.Bee", "Bee" )
     };
 
 

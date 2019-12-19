@@ -120,6 +120,7 @@ passive_mobs:
   wandering_trader: true
   wolf: true
   zombiehorse: true
+  bee: true
 
 vehicles:
   # Specific minecart types
