@@ -233,7 +233,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
         new MobMapping("bee", "org.bukkit.entity.Bee", "Bee" )
     };
 
-
     private MobMapping config_vehicles[] = {
             // Command Minecart
             new MobMapping("command-minecart", "org.bukkit.entity.minecart.CommandMinecart", "Command Minecart"),
@@ -252,8 +251,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             // Boat
             new MobMapping("boat", "org.bukkit.entity.Boat", "Boat")
     };
-    
-    
+        
     public static void info(String msg) {
         log.log(Level.INFO, msg);
     }
