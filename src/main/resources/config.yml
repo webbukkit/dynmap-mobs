@@ -16,90 +16,110 @@ update:
   # Vehicle updates per tick (prevent lag spikes when large number of vehicles)
   vehicles-per-tick: 20
 
-mobs:
-  elderguardian: true
-  witherskeleton: true
-  stray: true
-  husk: true
-  zombievillager: true
-  evoker: true
-  vex: true
-  vindicator: true
-  creeper: true
-  skeleton: true
-  giant: true
-  ghast: true
-  zombiepigman: true
-  zombie: true
-  enderman: true
+mocreat_mobs:
+  bear: false
+  bigcat: false
+  bird: false
+  boar: false
+  bunny: false
+  caveogre: false
+  crocodile: false
+  deer: false
+  dolphin: false
+  duck: false
+  fireogre: false
+  fishy: false
+  flamewraith: false
+  fox: false
+  goat: false
+  hellrat: false
+  horse: false
+  jellyfish: false
+  kitty: false
+  mouse: false
+  ogre: false
+  ostrich: false
+  polarbear: false
+  rat: false
+  ray: false
+  scorpion: false
+  shark: false
+  snake: false
+  turtle: false
+  werewolf: false
+  wildwolf: false
+  wraith: false
+
+hostile_mobs:
+  blaze: true
   cavespider: true
+  creeper: true
+  drowned: true
+  elderguardian: true
+  enderdragon: true
+  enderman: true
+  endermite: true
+  evoker: true
+  ghast: true
+  giant: true
+  guardian: true
+  husk: true
+  illusioner: true
+  magmacube: true
+  phantom: true
+  pillager: true
+  ravager: true
+  shulker: true
+  silverfish: true
+  skeleton: true
+  slime: true
   spider: true
   spiderjockey: true
-  silverfish: true
-  blaze: true
-  magmacube: true
-  slime: true
-  enderdragon: true
-  wither: true
+  stray: true
+  vex: true
+  vindicator: true
   witch: true
-  endermite: true
-  guardian: true
-  shulker: true
-  skeletonhorse: true
-  zombiehorse: true
-  donkey: true
-  mule: true
+  wither: true
+  witherskeleton: true
+  zombie: true
+  zombiepigman: true
+  zombievillager: true
+
+passive_mobs:
   bat: true
-  pig: true
-  sheep: true
-  cow: true
+  cat: true
   chicken: true
   chickenjockey: true
-  squid: true
-  wolf: true
-  tamedwolf: true
-  mooshroom: true
-  snowgolem: true
-  ocelot: true
-  cat: true
+  cod: true
+  cow: true
+  donkey: true
   golem: true
-  vanillahorse: true
-  rabbit: true
-  vanillapolarbear: true
   llama: true
+  mooshroom: true
+  mule: true
+  ocelot: true
+  panda: true
+  parrot: true
+  pig: true
+  pufferfish: true
+  rabbit: true
+  salmon: true
+  sheep: true
+  skeletonhorse: true
+  snowgolem: true
+  squid: true
+  tamedwolf: true
+  traderllama: true
+  tropicalfish: true
+  vanilladolphin: true
+  vanillafox: true
+  vanillahorse: true
+  vanillapolarbear: true
+  vanillaturtle: true
   villager: true
-  horse: false
-  fireogre: false
-  caveogre: false
-  ogre: false
-  boar: false
-  polarbear: false
-  bear: false
-  duck: false
-  bigcat: false
-  deer: false
-  wildwolf: false
-  flamewraith: false
-  wraith: false
-  bunny: false
-  bird: false
-  fox: false
-  werewolf: false
-  shark: false
-  dolphin: false
-  fishy: false
-  kitty: false
-  hellrat: false
-  rat: false
-  mouse: false
-  scorpion: false
-  turtle: false
-  crocodile: false
-  ray: false
-  jellyfish: false
-  goat: false
-  snake: false
-  ostrich: false
+  wandering_trader: true
+  wolf: true
+  zombiehorse: true
 
 vehicles:
   # Specific minecart types
@@ -113,8 +133,38 @@ vehicles:
   # Boats
   boat: false
   
-layer:
-  name: "Mobs"
+mocreatlayer:
+  name: "Mo'Creatures Mobs"
+  # Make mobs layer hidden by default
+  hidebydefault: false
+  # ordering priority in layer menu (low goes before high - default is 0)
+  layerprio: 10
+  # (optional) if true, use tiny marker icons (8x8) - default is 16x16
+  tinyicons: false
+  # (optional) if true, don't show labels on mob icons
+  nolabels: false
+  # (optional) set minimum zoom level when mob icons should be visible (0=default, any zoom)
+  minzoom: 0
+  # (optional) include coordinate in label for icon
+  inc-coord: false
+
+hostilelayer:
+  name: "Hostile Mobs"
+  # Make mobs layer hidden by default
+  hidebydefault: false
+  # ordering priority in layer menu (low goes before high - default is 0)
+  layerprio: 10
+  # (optional) if true, use tiny marker icons (8x8) - default is 16x16
+  tinyicons: false
+  # (optional) if true, don't show labels on mob icons
+  nolabels: false
+  # (optional) set minimum zoom level when mob icons should be visible (0=default, any zoom)
+  minzoom: 0
+  # (optional) include coordinate in label for icon
+  inc-coord: false
+
+passivelayer:
+  name: "Passive Mobs"
   # Make mobs layer hidden by default
   hidebydefault: false
   # ordering priority in layer menu (low goes before high - default is 0)
