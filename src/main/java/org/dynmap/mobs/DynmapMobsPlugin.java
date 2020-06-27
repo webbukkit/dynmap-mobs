@@ -173,7 +173,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         new MobMapping("ghast", "org.bukkit.entity.Ghast", "Ghast"),
         new MobMapping("drowned", "org.bukkit.entity.Drowned", "Drowned"),
         new MobMapping("phantom", "org.bukkit.entity.Phantom", "Phantom"),
-        new MobMapping("zombiepigman", "org.bukkit.entity.PigZombie", "Zombie Pigman"),
+        new MobMapping("zombiepigman", "org.bukkit.entity.PigZombie", "Zombified Piglin"),
         new MobMapping("zombie", "org.bukkit.entity.Zombie", "Zombie"), /* Must be last zombie type */
         new MobMapping("enderman", "org.bukkit.entity.Enderman", "Enderman"),
         new MobMapping("cavespider", "org.bukkit.entity.CaveSpider", "Cave Spider"),
@@ -191,7 +191,10 @@ public class DynmapMobsPlugin extends JavaPlugin {
         new MobMapping("shulker", "org.bukkit.entity.Shulker", "Shulker"),
         new MobMapping("ravager", "org.bukkit.entity.Ravager", "Ravager"),
         new MobMapping("illusioner", "org.bukkit.entity.Illusioner", "Illusioner"),
-        new MobMapping("pillager", "org.bukkit.entity.Pillager", "Pillager")
+        new MobMapping("pillager", "org.bukkit.entity.Pillager", "Pillager"),
+        new MobMapping("piglin", "org.bukkit.entity.Piglin", "Piglin"),
+        new MobMapping("hoglin", "org.bukkit.entity.Hoglin", "Hoglin"),
+        new MobMapping("zoglin", "org.bukkit.entity.Zoglin", "Zoglin")
     };
 
     private MobMapping config_passive_mobs[] = {
@@ -230,7 +233,8 @@ public class DynmapMobsPlugin extends JavaPlugin {
         new MobMapping("parrot", "org.bukkit.entity.Parrot", "Parrot"),
         new MobMapping("panda", "org.bukkit.entity.Panda", "Panda"),
         new MobMapping("vanillafox", "org.bukkit.entity.Fox", "Fox" ),
-        new MobMapping("bee", "org.bukkit.entity.Bee", "Bee" )
+        new MobMapping("bee", "org.bukkit.entity.Bee", "Bee" ),
+        new MobMapping("strider", "org.bukkit.entity.Strider", "Strider")
     };
 
     private MobMapping config_vehicles[] = {
