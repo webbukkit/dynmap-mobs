@@ -125,6 +125,9 @@ passive_mobs:
   wolf: true
   zombiehorse: true
   bee: true
+  glowsquid: true
+  goat: true
+  axolotl: true
 
 vehicles:
   # Specific minecart types
