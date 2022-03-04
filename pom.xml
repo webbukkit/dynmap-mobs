@@ -58,7 +58,7 @@
   	<dependency>
   		<groupId>org.spigotmc</groupId>
   		<artifactId>spigot-api</artifactId>
-  		<version>1.16.1-R0.1-SNAPSHOT</version>
+  		<version>1.18.1-R0.1-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>us.dynmap</groupId>
@@ -69,5 +69,5 @@
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  <version>1.6-gabsoftware</version>
+  <version>1.7</version>
 </project>
