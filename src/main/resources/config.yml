@@ -126,7 +126,7 @@ passive_mobs:
   zombiehorse: true
   bee: true
   glowsquid: true
-  goat: true
+  vanillagoat: true
   axolotl: true
 
 vehicles:
