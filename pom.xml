@@ -42,7 +42,7 @@
 			<snapshots>
 			</snapshots>
 			<id>bukkit-repo</id>
-			<url>http://hub.spigotmc.org/nexus/content/groups/public/</url>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<repository>
 			<releases>
@@ -50,7 +50,7 @@
 			<snapshots>
 			</snapshots>
 			<id>dynmap-repo</id>
-			<url>http://repo.mikeprimm.com/</url>
+			<url>https://repo.mikeprimm.com/</url>
 		</repository>
 	</repositories>
   
@@ -58,7 +58,7 @@
   	<dependency>
   		<groupId>org.spigotmc</groupId>
   		<artifactId>spigot-api</artifactId>
-  		<version>1.18.1-R0.1-SNAPSHOT</version>
+  		<version>1.18.2-R0.1-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>us.dynmap</groupId>

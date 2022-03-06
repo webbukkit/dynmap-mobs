@@ -1,10 +1,5 @@
-Dynmap-mobs for 1.14x
+Dynmap-mobs for 1.18+
 
-Build:
-download and compile dynmap
-extract dynmap-mobs into dynmap directory
-cd dynmap-mobs
-gradle build
+HOW TO COMPILE:
+use Maven to package with mvn package
 
-If it complains about missing tools.jar, create dynmap-mobs/gradle.properties with:
-org.gradle.java.home=/path/to/your/oracle/jdk/1.8.0
