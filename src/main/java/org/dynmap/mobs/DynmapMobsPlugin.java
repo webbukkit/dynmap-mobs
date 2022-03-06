@@ -1367,7 +1367,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
             info("Layer for vehicles disabled");
         }
 
-        info("version 1.7-SynergySMP is activated");
+        info("version 1.7 is activated");
     }
 
     public void onDisable() {
