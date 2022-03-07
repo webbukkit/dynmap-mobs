@@ -60,6 +60,13 @@
   		<artifactId>spigot-api</artifactId>
   		<version>1.18.2-R0.1-SNAPSHOT</version>
   	</dependency>
+<!-- bStats -->
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-bukkit</artifactId>
+      <version>3.0.0</version>
+      <scope>compile</scope>
+    </dependency>
   	<dependency>
   		<groupId>us.dynmap</groupId>
   		<artifactId>dynmap-api</artifactId>
