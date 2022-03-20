@@ -998,11 +998,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
         if(dynmap.isEnabled())
             activate();
         
-        try {
-            MetricsLite ml = new MetricsLite(this);
-            ml.start();
-        } catch (IOException iox) {
-        }
     }
 
     private static String getNMSPackage() {
