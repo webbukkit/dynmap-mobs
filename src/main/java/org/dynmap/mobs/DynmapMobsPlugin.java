@@ -659,7 +659,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 else if(passive_mobs[i].mobid.equals("cat")) { /* Check for tamed cat */
                     Cat cat = (Cat)le;
                     if(cat.isTamed()) {
-                        i = findNext(i, "cat", passive_mobs);
                         AnimalTamer t = cat.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Cat (" + ((OfflinePlayer)t).getName() + ")";
@@ -669,7 +668,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 else if(passive_mobs[i].mobid.equals("vanillahorse")) { /* Check for tamed horse */
                     Horse horse = (Horse)le;
                     if(horse.isTamed()) {
-                        i = findNext(i, "vanillahorse", passive_mobs);
                         AnimalTamer t = horse.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Horse (" + ((OfflinePlayer)t).getName() + ")";
@@ -679,7 +677,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 else if(passive_mobs[i].mobid.equals("traderllama")) { /* Check for tamed traderllama */
                     TraderLlama traderllama = (TraderLlama)le;
                     if(traderllama.isTamed()) {
-                        i = findNext(i, "traderllama", passive_mobs);
                         AnimalTamer t = traderllama.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "TraderLlama (" + ((OfflinePlayer)t).getName() + ")";
@@ -689,7 +686,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 else if(passive_mobs[i].mobid.equals("llama")) { /* Check for tamed llama */
                     Llama llama = (Llama)le;
                     if(llama.isTamed()) {
-                        i = findNext(i, "llama", passive_mobs);
                         AnimalTamer t = llama.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Llama (" + ((OfflinePlayer)t).getName() + ")";
@@ -699,7 +695,6 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 else if(passive_mobs[i].mobid.equals("parrot")) { /* Check for tamed parrot */
                     Parrot parrot = (Parrot)le;
                     if(parrot.isTamed()) {
-                        i = findNext(i, "parrot", passive_mobs);
                         AnimalTamer t = parrot.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Parrot (" + ((OfflinePlayer)t).getName() + ")";
