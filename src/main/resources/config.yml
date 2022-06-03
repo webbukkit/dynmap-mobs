@@ -112,6 +112,13 @@ passive_mobs:
   snowgolem: true
   squid: true
   strider: true
+  tamedcat: true
+  tameddonkey: true
+  tamedllama: true
+  tamedmule: true
+  tamedparrot: true
+  tamedtraderllama: true
+  tamedvanillahorse: true
   tamedwolf: true
   traderllama: true
   tropicalfish: true
