@@ -27,4 +27,4 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: dynmap-mobs
-        path: /home/runner/work/dynmap-mobs/dynmap-mobs/target/dynmap-mobs-1.7.jar
+        path: /home/runner/work/dynmap-mobs/dynmap-mobs/target/dynmap-mobs-*.jar
