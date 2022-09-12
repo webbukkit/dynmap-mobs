@@ -202,7 +202,9 @@ public class DynmapMobsPlugin extends JavaPlugin {
         new MobMapping("skeletonhorse", "org.bukkit.entity.SkeletonHorse", "Skeleton Horse"),
         new MobMapping("zombiehorse", "org.bukkit.entity.ZombieHorse", "Zombie Horse"),
         new MobMapping("donkey", "org.bukkit.entity.Donkey", "Donkey"),
+        new MobMapping("tameddonkey", "org.bukkit.entity.Donkey", "Donkey"),
         new MobMapping("mule", "org.bukkit.entity.Mule", "Mule"),
+        new MobMapping("tamedmule", "org.bukkit.entity.Mule", "Mule"),
         new MobMapping("bat", "org.bukkit.entity.Bat", "Bat"),
         new MobMapping("pig", "org.bukkit.entity.Pig", "Pig"),
         new MobMapping("sheep", "org.bukkit.entity.Sheep", "Sheep"),
@@ -216,12 +218,16 @@ public class DynmapMobsPlugin extends JavaPlugin {
         new MobMapping("snowgolem", "org.bukkit.entity.Snowman", "Snow Golem"),
         new MobMapping("ocelot", "org.bukkit.entity.Ocelot", "Ocelot"),
         new MobMapping("cat", "org.bukkit.entity.Cat", "Cat"),
+        new MobMapping("tamedcat", "org.bukkit.entity.Cat", "Cat"),
         new MobMapping("golem", "org.bukkit.entity.IronGolem", "Iron Golem"),
         new MobMapping("vanillahorse", "org.bukkit.entity.Horse", "Horse"),
+        new MobMapping("tamedvanillahorse", "org.bukkit.entity.Horse", "Horse"),
         new MobMapping("rabbit", "org.bukkit.entity.Rabbit", "Rabbit"),
         new MobMapping("vanillapolarbear", "org.bukkit.entity.PolarBear", "Polar Bear"),
-        new MobMapping("llama", "org.bukkit.entity.Llama", "Llama"),
         new MobMapping("traderllama", "org.bukkit.entity.TraderLlama", "Trader Llama"),
+        new MobMapping("tamedtraderllama", "org.bukkit.entity.TraderLlama", "Trader Llama"),
+        new MobMapping("llama", "org.bukkit.entity.Llama", "Llama"),
+        new MobMapping("tamedllama", "org.bukkit.entity.Llama", "Llama"),
         new MobMapping("wandering_trader", "org.bukkit.entity.WanderingTrader", "Wandering Trader"),
         new MobMapping("villager", "org.bukkit.entity.Villager", "Villager"),
         new MobMapping("vanilladolphin", "org.bukkit.entity.Dolphin", "Dolphin"),
@@ -231,6 +237,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
         new MobMapping("tropicalfish", "org.bukkit.entity.TropicalFish", "Tropical Fish"),
         new MobMapping("vanillaturtle", "org.bukkit.entity.Turtle", "Turtle"),
         new MobMapping("parrot", "org.bukkit.entity.Parrot", "Parrot"),
+        new MobMapping("tamedparrot", "org.bukkit.entity.Parrot", "Parrot"),
         new MobMapping("panda", "org.bukkit.entity.Panda", "Panda"),
         new MobMapping("vanillafox", "org.bukkit.entity.Fox", "Fox" ),
         new MobMapping("bee", "org.bukkit.entity.Bee", "Bee" ),
@@ -659,7 +666,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 else if(passive_mobs[i].mobid.equals("cat")) { /* Check for tamed cat */
                     Cat cat = (Cat)le;
                     if(cat.isTamed()) {
-                        i = findNext(i, "cat", passive_mobs);
+                        i = findNext(i, "tamedcat", passive_mobs);
                         AnimalTamer t = cat.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Cat (" + ((OfflinePlayer)t).getName() + ")";
@@ -669,17 +676,37 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 else if(passive_mobs[i].mobid.equals("vanillahorse")) { /* Check for tamed horse */
                     Horse horse = (Horse)le;
                     if(horse.isTamed()) {
-                        i = findNext(i, "vanillahorse", passive_mobs);
+                        i = findNext(i, "tamedvanillahorse", passive_mobs);
                         AnimalTamer t = horse.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Horse (" + ((OfflinePlayer)t).getName() + ")";
                         }
                     }
                 }
+                else if(passive_mobs[i].mobid.equals("donkey")) { /* Check for tamed donkey */
+                    Donkey donkey = (Donkey)le;
+                    if(donkey.isTamed()) {
+                        i = findNext(i, "tameddonkey", passive_mobs);
+                        AnimalTamer t = donkey.getOwner();
+                        if((t != null) && (t instanceof OfflinePlayer)) {
+                            label = "Donkey (" + ((OfflinePlayer)t).getName() + ")";
+                        }
+                    }
+                }
+                else if(passive_mobs[i].mobid.equals("mule")) { /* Check for tamed mule */
+                    Mule mule = (Mule)le;
+                    if(mule.isTamed()) {
+                        i = findNext(i, "tamedmule", passive_mobs);
+                        AnimalTamer t = mule.getOwner();
+                        if((t != null) && (t instanceof OfflinePlayer)) {
+                            label = "Mule (" + ((OfflinePlayer)t).getName() + ")";
+                        }
+                    }
+                }
                 else if(passive_mobs[i].mobid.equals("traderllama")) { /* Check for tamed traderllama */
                     TraderLlama traderllama = (TraderLlama)le;
                     if(traderllama.isTamed()) {
-                        i = findNext(i, "traderllama", passive_mobs);
+                        i = findNext(i, "tamedtraderllama", passive_mobs);
                         AnimalTamer t = traderllama.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "TraderLlama (" + ((OfflinePlayer)t).getName() + ")";
@@ -689,7 +716,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 else if(passive_mobs[i].mobid.equals("llama")) { /* Check for tamed llama */
                     Llama llama = (Llama)le;
                     if(llama.isTamed()) {
-                        i = findNext(i, "llama", passive_mobs);
+                        i = findNext(i, "tamedllama", passive_mobs);
                         AnimalTamer t = llama.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Llama (" + ((OfflinePlayer)t).getName() + ")";
@@ -699,7 +726,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
                 else if(passive_mobs[i].mobid.equals("parrot")) { /* Check for tamed parrot */
                     Parrot parrot = (Parrot)le;
                     if(parrot.isTamed()) {
-                        i = findNext(i, "parrot", passive_mobs);
+                        i = findNext(i, "tamedparrot", passive_mobs);
                         AnimalTamer t = parrot.getOwner();
                         if((t != null) && (t instanceof OfflinePlayer)) {
                             label = "Parrot (" + ((OfflinePlayer)t).getName() + ")";
@@ -758,18 +785,13 @@ public class DynmapMobsPlugin extends JavaPlugin {
                                 break;
                         }
                     }
-                }                
-                else if(passive_mobs[i].mobid.equals("vanillahorse")
-                	 || passive_mobs[i].mobid.equals("llama")
-                	 || passive_mobs[i].mobid.equals("traderllama")
-                	 || passive_mobs[i].mobid.equals("donkey")
-                	 || passive_mobs[i].mobid.equals("mule")
-                	 || passive_mobs[i].mobid.equals("zombiehorse")
+                }
+                else if(passive_mobs[i].mobid.equals("zombiehorse")
                 	 || passive_mobs[i].mobid.equals("skeletonhorse")) {    /* Check for rider */
                     if(le.getPassenger() != null) { /* Has passenger? */
                         Entity e = le.getPassenger();
                         if (e instanceof Player) {
-                            label = label + " (" + ((Player)e).getName() + ")";
+                            label = passive_mobs[i].label + " (" + ((Player)e).getName() + ")";
                         }
                     }
                 }
