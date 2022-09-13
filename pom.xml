@@ -28,8 +28,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.0.2</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
   	
@@ -42,7 +42,7 @@
 			<snapshots>
 			</snapshots>
 			<id>bukkit-repo</id>
-			<url>http://hub.spigotmc.org/nexus/content/groups/public/</url>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<repository>
 			<releases>
@@ -50,24 +50,31 @@
 			<snapshots>
 			</snapshots>
 			<id>dynmap-repo</id>
-			<url>http://repo.mikeprimm.com/</url>
+			<url>https://repo.mikeprimm.com/</url>
 		</repository>
 	</repositories>
   
   <dependencies>
   	<dependency>
-  		<groupId>org.bukkit</groupId>
-  		<artifactId>bukkit</artifactId>
-  		<version>1.11-R0.1-SNAPSHOT</version>
+  		<groupId>org.spigotmc</groupId>
+  		<artifactId>spigot-api</artifactId>
+  		<version>1.18.2-R0.1-SNAPSHOT</version>
   	</dependency>
+<!-- bStats -->
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-bukkit</artifactId>
+      <version>3.0.0</version>
+      <scope>compile</scope>
+    </dependency>
   	<dependency>
   		<groupId>us.dynmap</groupId>
   		<artifactId>dynmap-api</artifactId>
-  		<version>2.2-SNAPSHOT</version>
+  		<version>3.4-SNAPSHOT</version>
   	</dependency>
   </dependencies>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  <version>1.4</version>
+  <version>1.8</version>
 </project>

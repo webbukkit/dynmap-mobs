@@ -1,6 +1,7 @@
 name: dynmap-mobs
 main: org.dynmap.mobs.DynmapMobsPlugin
 version: "${project.version}"
+api-version: "1.18"
 author: mikeprimm
 depend: [ dynmap ]
 
