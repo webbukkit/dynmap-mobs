@@ -58,7 +58,7 @@
   	<dependency>
   		<groupId>org.spigotmc</groupId>
   		<artifactId>spigot-api</artifactId>
-  		<version>1.18.2-R0.1-SNAPSHOT</version>
+  		<version>1.20.1-R0.1-SNAPSHOT</version>
   	</dependency>
 <!-- bStats -->
     <dependency>
@@ -70,11 +70,11 @@
   	<dependency>
   		<groupId>us.dynmap</groupId>
   		<artifactId>dynmap-api</artifactId>
-  		<version>3.4-SNAPSHOT</version>
+  		<version>3.6-SNAPSHOT</version>
   	</dependency>
   </dependencies>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  <version>1.7</version>
+  <version>1.8</version>
 </project>
