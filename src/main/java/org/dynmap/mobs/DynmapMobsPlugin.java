@@ -243,7 +243,7 @@ public class DynmapMobsPlugin extends JavaPlugin {
 	new MobMapping("frog", "org.bukkit.entity.Frog", "Frog"),
 	new MobMapping("tadpole", "org.bukkit.entity.Tadpole", "Tadpole"),
 	new MobMapping("allay", "org.bukkit.entity.Allay", "Allay"),
-	new MobMapping("sniffer", "org.bukkit.entity.Sniffer", Sniffer")
+	new MobMapping("sniffer", "org.bukkit.entity.Sniffer", "Sniffer")
     };
 
     private MobMapping config_vehicles[] = {
