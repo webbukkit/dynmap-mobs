@@ -1,0 +1,5 @@
+Dynmap-mobs for 1.18+
+
+HOW TO COMPILE:
+use Maven to package with mvn package
+
